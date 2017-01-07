@@ -22,3 +22,6 @@ accounts-facebook
 service-configuration
 session
 react-meteor-data
+accounts-password
+accounts-google
+npm-bcrypt

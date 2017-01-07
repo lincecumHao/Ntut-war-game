@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Login = ({ children }) => (
+const Auth = ({ children }) => (
     <div>
         <div className="frame">
             <img src="https://dummyimage.com/108/000/fff" width="108px" height="108px" />
@@ -11,8 +11,8 @@ const Login = ({ children }) => (
     </div>
 );
 
-Login.propTypes = {
+Auth.propTypes = {
     children: React.PropTypes.node
 };
 
-export default Login;
+export default Auth;
