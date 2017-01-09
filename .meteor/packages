@@ -25,3 +25,4 @@ react-meteor-data
 accounts-password
 accounts-google
 npm-bcrypt
+mizzao:user-status
