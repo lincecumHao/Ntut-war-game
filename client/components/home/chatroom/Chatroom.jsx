@@ -1,29 +1,25 @@
 import React, { Component } from 'react';
+import MessageContainer from './MessageContainer.jsx';
 
 class Chatroom extends Component {
+
+    constructor(props) {
+        super(props);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
+    }
+
+    handleKeyPress(event) {
+        if (event.key == 'Enter') {
+            console.log('enter press here! ')
+        }
+    }
+
     render() {
         return (
             <div className="chatroom">
                 <h3>聊天室</h3>
-                <div className="message">
-                    <p>
-                        <label>水利局說:</label>報告各單位，大安區、中正區、信義區累積雨量已達200mm，是否回報縣府實施避災作業。</p>
-                    <p>
-                        <label>水利局說:</label>報告各單位，大安區、中正區、信義區累積雨量已達200mm，是否回報縣府實施避災作業。</p>
-                    <p>
-                        <label>水利局說:</label>報告各單位，大安區、中正區、信義區累積雨量已達200mm，是否回報縣府實施避災作業。</p>
-                    <p>
-                        <label>水利局說:</label>報告各單位，大安區、中正區、信義區累積雨量已達200mm，是否回報縣府實施避災作業。</p>
-                    <p>
-                        <label>水利局說:</label>報告各單位，大安區、中正區、信義區累積雨量已達200mm，是否回報縣府實施避災作業。</p>
-                    <p>
-                        <label>水利局說:</label>報告各單位，大安區、中正區、信義區累積雨量已達200mm，是否回報縣府實施避災作業。</p>
-                    <p>
-                        <label>水利局說:</label>報告各單位，大安區、中正區、信義區累積雨量已達200mm，是否回報縣府實施避災作業。</p>
-                    <p>
-                        <label>水利局說:</label>報告各單位，大安區、中正區、信義區累積雨量已達200mm，是否回報縣府實施避災作業。</p>
-                </div>
-                <input name="" type="text" placeholder="Type a message" />
+                <MessageContainer />
+                <input name="" type="text" placeholder="Type a message" onKeyDown={this.handleKeyPress} />
             </div>
         );
     }

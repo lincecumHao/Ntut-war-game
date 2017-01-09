@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import OnlineUser from './OnlineUser.jsx';
 import { createContainer } from 'meteor/react-meteor-data';
 
-class ChatroomUsers extends Component {
+class OnlineUserContainer extends Component {
 
     constructor(props) {
         super(props);
@@ -41,4 +41,4 @@ export default createContainer(() => {
         onlineUsers: Meteor.users.find().fetch(),
         loading
     }
-}, ChatroomUsers);
+}, OnlineUserContainer);
