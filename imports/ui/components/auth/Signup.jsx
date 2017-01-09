@@ -81,6 +81,7 @@ class Signup extends Component {
             email,
             password,
             profile: {
+                name: username,
                 gender,
                 age,
                 seniority,
