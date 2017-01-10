@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import OnlineUser from './OnlineUser.jsx';
+import User from './User.jsx';
 import { createContainer } from 'meteor/react-meteor-data';
 
-class OnlineUserContainer extends Component {
+class UserContainer extends Component {
 
     constructor(props) {
         super(props);
@@ -13,9 +13,10 @@ class OnlineUserContainer extends Component {
         let users = [];
         this.props.onlineUsers.forEach(user => {
             users.push(
-                <OnlineUser
+                <User
                     key={user._id}
                     position={user.profile.position}
+                    name={user.profile.name}
                     />
             );
         });
@@ -41,4 +42,4 @@ export default createContainer(() => {
         onlineUsers: Meteor.users.find().fetch(),
         loading
     }
-}, OnlineUserContainer);
+}, UserContainer);

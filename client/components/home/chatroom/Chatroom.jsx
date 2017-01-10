@@ -1,25 +1,18 @@
 import React, { Component } from 'react';
+import UserContainer from './UserContainer.jsx';
 import MessageContainer from './MessageContainer.jsx';
+import SendMsg from './SendMsg.jsx';
 
 class Chatroom extends Component {
-
-    constructor(props) {
-        super(props);
-        this.handleKeyPress = this.handleKeyPress.bind(this);
-    }
-
-    handleKeyPress(event) {
-        if (event.key == 'Enter') {
-            console.log('enter press here! ')
-        }
-    }
-
     render() {
         return (
-            <div className="chatroom">
-                <h3>聊天室</h3>
-                <MessageContainer />
-                <input name="" type="text" placeholder="Type a message" onKeyDown={this.handleKeyPress} />
+            <div>
+                <UserContainer />
+                <div className="chatroom">
+                    <h3>聊天室</h3>
+                    <MessageContainer />
+                    <SendMsg />
+                </div>
             </div>
         );
     }
