@@ -37,7 +37,6 @@ class Signup extends Component {
                 let {name, email, gender, picture} = user.services.google;
                 this.setState({
                     avatar: picture,
-                    username: name,
                     gender,
                     email
                 });
@@ -50,7 +49,6 @@ class Signup extends Component {
                         });
                     });
                 this.setState({
-                    username: name,
                     gender,
                     email
                 });
@@ -146,7 +144,7 @@ class Signup extends Component {
                             </div>
                         </Col>
                         <Col xs={12} md={4} className="profiles">
-                            <input type="text" disabled={isUpdate} name="username" placeholder="&#xf2c0;  Name" required value={username} onChange={this.onInputChange} />
+                            <input type="text" name="username" placeholder="&#xf2c0;  Name" required value={username} onChange={this.onInputChange} />
                             <input type="email" disabled={isUpdate} name="email" placeholder="&#xf003;  Email" required value={email} onChange={this.onInputChange} />
                             <input type="password" disabled={isUpdate} name="password" placeholder="&#xf084;  Password" required value={password} onChange={this.onInputChange} />
                             <input type="password" disabled={isUpdate} name="pwdConfirm" placeholder="&#xf084;  Confirm Password" value={pwdConfirm} required onChange={this.onInputChange} />
