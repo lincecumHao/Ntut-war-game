@@ -123,12 +123,21 @@ body {
 }
 
 .chatroom_user .label-white {
+    cursor: pointer;
     display: inline-flex;
     background-color: #FFF;
     border: 2px solid #231815;
     margin: 4px;
     color: #231815;
     font-size: 15px;
+}
+
+.chatroom_user .label-white:hover {
+    background-color: #cdc7c7;
+}
+
+.chatroom_user .label-white.active {
+    background-color: #cdc7c7;
 }
 
 .label-white[href]:hover,

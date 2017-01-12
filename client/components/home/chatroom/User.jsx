@@ -1,18 +1,21 @@
 import React, { Component, PropTypes } from 'react';
+import classnames from 'classnames';
 
 class User extends Component {
     constructor(props) {
         super(props);
-        this.onClickUser = this.onClickUser.bind(this);
     }
 
-    onClickUser(){
-        console.log('awef');
-    }
-    
     render() {
+        let clsName = classnames({
+            'label' : 1,
+            'label-white': 1,
+            active: this.props.active
+        });
         return (
-            <span className="label label-white" onClick={this.onClickUser}>
+            <span className={clsName} onClick={() => {
+                this.props.onClickUser(this.props.userId)
+            } }>
                 {this.props.position}[{this.props.name}]
             </span>
         );
@@ -20,13 +23,16 @@ class User extends Component {
 }
 
 User.propTypes = {
+    userId: PropTypes.string.isRequired,
     position: PropTypes.string,
-    name: PropTypes.string
+    name: PropTypes.string,
+    active: PropTypes.bool
 };
 
 User.defaultProps = {
     position: '',
-    name: 'Test'
+    name: 'Test',
+    active: false
 };
 
 export default User;

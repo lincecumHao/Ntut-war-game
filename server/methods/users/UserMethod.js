@@ -1,8 +1,7 @@
 import {
     Meteor
 } from 'meteor/meteor';
-import { check } from 'meteor/check'
-import { UserStatus } from 'meteor/mizzao:user-status';
+import { check } from 'meteor/check';
 
 Meteor.startup(() => {
     // Publish full user data.
@@ -16,10 +15,13 @@ Meteor.startup(() => {
 
     // For get all online user.
     Meteor.publish('userStatus', function() {
-        return [
-            Meteor.users.find({ 'status.online': true }, {profile: 1}),
-            UserStatus.connections.find()
-        ];
+        return Meteor.users.find({ 'status.online': true }, { fields: { profile: 1 } });
+    });
+
+    // Get users via ids.
+    Meteor.publish('users', function(ids) {
+        check(ids, [String]);
+        return Meteor.users.find({ _id: { $in: ids } }, { fields: { profile: 1 } });
     });
 
     // Prevent client write any code.
