@@ -41,7 +41,7 @@ export default createContainer(() => {
     const users = Meteor.subscribe('userStatus');
     const loading = !users.ready();
     return {
-        onlineUsers: Meteor.users.find({ _id: { $ne: Meteor.userId() } }).fetch(),
+        onlineUsers: Meteor.users.find({ _id: { $ne: Meteor.userId() }, 'status.online': true }).fetch(),
         loading
     }
 }, UserContainer);

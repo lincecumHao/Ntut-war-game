@@ -13,7 +13,7 @@ const formatUser = (user) => {
 
 export default createContainer((props) => {
     Meteor.subscribe('users', [props.from, props.to]);
-    let users = Meteor.users.find({}).fetch();
+    let users = Meteor.users.find({ _id: { $in: [props.from, props.to] } }).fetch();
     let from = formatUser(users.filter(user => {
         return user._id === props.from
     })[0]);

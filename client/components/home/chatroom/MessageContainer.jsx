@@ -10,6 +10,11 @@ class MessageContainer extends Component {
         this.renderMsg = this.renderMsg.bind(this);
     }
 
+    componentDidUpdate() {
+        var node = this.refs['msg-container'];
+        node.scrollTop = node.scrollHeight;
+    }
+
     renderMsg() {
         return this.props.messages.map(msg => {
             return (
@@ -25,7 +30,7 @@ class MessageContainer extends Component {
 
     render() {
         return (
-            <div className="message">
+            <div className="message" ref="msg-container" >
                 {this.renderMsg()}
             </div>
         );

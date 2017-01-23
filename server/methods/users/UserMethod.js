@@ -4,6 +4,7 @@ import {
 import { check } from 'meteor/check';
 
 Meteor.startup(() => {
+
     // Publish full user data.
     Meteor.publish('userData', function() {
         if (this.userId) {
@@ -15,13 +16,13 @@ Meteor.startup(() => {
 
     // For get all online user.
     Meteor.publish('userStatus', function() {
-        return Meteor.users.find({ 'status.online': true }, { fields: { profile: 1 } });
+        return Meteor.users.find({ 'status.online': true });
     });
 
     // Get users via ids.
     Meteor.publish('users', function(ids) {
         check(ids, [String]);
-        return Meteor.users.find({ _id: { $in: ids } }, { fields: { profile: 1 } });
+        return Meteor.users.find({ _id: { $in: ids } });
     });
 
     // Prevent client write any code.
