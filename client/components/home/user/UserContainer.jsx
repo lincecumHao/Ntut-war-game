@@ -11,6 +11,7 @@ class UserContainer extends Component {
 
     renderUser() {
         let {name, avatar, position} = Meteor.user().profile;
+        if(!avatar || avatar.length == 0) avatar = './images/user_img.png';
         return (
             <User
                 username={name}
