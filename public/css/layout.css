@@ -343,7 +343,7 @@ body {
 
 .resource_item div input[type="text"] {
     margin-left: -1px;
-    /*margin-right: -1px;*/
+    margin-right: -1px;
     width: 40px;
     text-align: center;
 }

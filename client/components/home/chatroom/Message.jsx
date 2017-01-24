@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
 const Message = ({ from, to, msg }) => (

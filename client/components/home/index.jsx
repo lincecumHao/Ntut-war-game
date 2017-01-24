@@ -3,7 +3,7 @@ import UserContainer from './user/UserContainer.jsx';
 import Chatroom from './chatroom/Chatroom.jsx';
 import EagleMap from './map/EagleMap.jsx';
 import Status from './header/Status.jsx';
-import Resources from './resource/Resources.jsx';
+import ResourceContainer from './resource/ResourceContainer.jsx';
 import MainMap from './map/MainMap.jsx';
 
 class Home extends Component {
@@ -52,7 +52,7 @@ class Home extends Component {
                     </div>
                     <MainMap />
                     <div className="footer">
-                        <Resources />
+                        <ResourceContainer />
                     </div>
                 </div>
             </div>
