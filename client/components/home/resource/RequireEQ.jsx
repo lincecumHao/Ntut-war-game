@@ -1,10 +1,27 @@
 import React, { Component } from 'react';
 
 class RequireEQ extends Component {
+    constructor(props) {
+        super(props);
+        this.switchOpenEq = this.switchOpenEq.bind(this);
+        this.state = {
+            isOpen: false
+        }
+    }
+
+    switchOpenEq() {
+        this.setState({
+            isOpen: !this.state.isOpen
+        });
+    }
+    
     render() {
+        let eqBoxStyle = {
+            visibility: (this.state.isOpen ? 'visible' : 'hidden')
+        }
         return (
             <div className="Requiredbox pull-right">
-                <div className="Required">
+                <div className="Required" style={eqBoxStyle}>
                     <h3>所需裝備支援為:</h3>
                     <ul>
                         <li>消防車</li>
@@ -18,8 +35,8 @@ class RequireEQ extends Component {
                         <li>可動員人數</li>
                     </ul>
                 </div>
-                <span className="triangle_icon"></span>
-                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                <span className="triangle_icon" style={eqBoxStyle}></span>
+                <span onClick={this.switchOpenEq} className="glyphicon glyphicon-exclamation-sign"></span>
             </div>
         );
     }

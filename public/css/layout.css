@@ -120,6 +120,10 @@ body {
     font-size: 15px;
 }
 
+.chatroom_user .label-white.active {
+    background-color: #16ff5f;
+}
+
 .label-white[href]:hover,
 .label-white[href]:focus {
     background-color: #5e5e5e;
@@ -393,9 +397,14 @@ body {
 }
 
 .Requiredbox .glyphicon {
+    cursor: pointer;
     margin-right: 20px;
     margin-top: 8px;
     color: red;
+}
+
+.Requiredbox .glyphicon:hover {
+    box-shadow: 3px 3px 5px #888888;
 }
 
 .Required {
