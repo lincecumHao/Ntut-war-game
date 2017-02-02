@@ -18,6 +18,7 @@
 .user_img img {
     vertical-align: middle;
     border-radius: 54px;
+    cursor: pointer;
 }
 
 .login-container {

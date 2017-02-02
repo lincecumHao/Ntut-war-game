@@ -35,6 +35,7 @@
     "react/jsx-uses-vars": 1
   },
   "globals": {
-    "google": true    
+    "google": true,
+    "MarkerWithLabel": true
    }
 }

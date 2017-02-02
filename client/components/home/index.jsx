@@ -10,30 +10,6 @@ class Home extends Component {
 
     constructor(props) {
         super(props);
-        this.eagleMap = null;
-        this.mainMap = null;
-    }
-    
-
-    componentDidMount() {
-        this.eagleMap = new google.maps.Map(document.getElementById('eagle_map'), {
-            center: { lat: 25.045552, lng: 121.531083 },
-            zoom: 13,
-            maxZoom: 16,
-            minZoom: 12,
-            draggable: false,
-            zoomControl: false,
-            scrollwheel: false,
-            panControl: false,
-            disableDoubleClickZoom: true,
-            clickToGo: false
-
-        });
-        this.mainMap = new google.maps.Map(document.getElementById('mainMap'), {
-            center: { lat: 25.045552, lng: 121.531083 },
-            zoom: 13
-        });
-        window.mainMap = this.mainMap;
     }
 
     render() {
