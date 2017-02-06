@@ -54,6 +54,91 @@ body {
     margin-top: -5px;
 }
 
+
+/* user Bubble */
+
+.user-bubblebox {
+    position: absolute;
+    top: 80px;
+}
+
+.user-bubble {
+    background-color: #231816;
+    border: 2px solid #FFF;
+    margin: 20px auto;
+    position: relative;
+    width: 130px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-box-shadow: 0 0 5px #888888;
+    -webkit-box-shadow: 0 0 5px #888888;
+    z-index: 999;
+}
+
+.user-bubble-arrow-border {
+    border-color: transparent transparent #fff transparent;
+    border-style: solid;
+    border-width: 0 10px 15px 10px;
+    height: 0;
+    width: 0;
+    position: absolute;
+    top: -17px;
+    left: 45px;
+}
+
+.user-bubble-arrow {
+    border-color: transparent transparent #231816 transparent;
+    border-style: solid;
+    border-width: 0 10px 15px 10px;
+    height: 0;
+    width: 0;
+    position: absolute;
+    top: -14px;
+    left: 45px;
+}
+
+
+/* IE6 */
+
+.user-bubble-arrow {
+    _border-left-color: #231816;
+    _border-bottom-color: #231816;
+    _border-right-color: #231816;
+    _filter: chroma(color=#231816);
+}
+
+
+/* ----------- */
+
+
+/* user Bubble  ul*/
+
+.user-bubble ul {
+    font-size: 16px;
+    padding: 0;
+    margin: 0;
+}
+
+.user-bubble ul li {
+    list-style: none;
+    border-bottom: 1px solid #FFF;
+    text-indent: 12px;
+}
+
+.user-bubble ul li:last-child {
+    border-bottom: none;
+    padding-bottom: 0px;
+}
+
+.user-bubble ul li a {
+    color: #FFF;
+    text-align: left;
+    line-height: 36px;
+}
+
+
+/* ----------- */
+
 .user_info {
     float: right;
     text-align: center;

@@ -1,9 +1,9 @@
 import React, {PropTypes} from 'react';
 
-const User = ({ avatar, username, position }) => (
+const User = ({ avatar, username, position, onClick }) => (
     <div className="user">
         <div className="user_img ">
-            <img src={avatar} width="73px" height="73px" />
+            <img src={avatar} width="73px" height="73px" onClick={onClick}/>
         </div>
         <div className="user_info">
             <span className="badge"> {username}</span>
@@ -13,6 +13,7 @@ const User = ({ avatar, username, position }) => (
 );
 
 User.propTypes = {
+    onClick: PropTypes.func,
     avatar: PropTypes.string,
     username: PropTypes.string,
     position: PropTypes.string

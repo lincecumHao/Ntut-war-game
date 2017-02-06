@@ -17,21 +17,18 @@ body {
     margin-left: 290px;
     height: inherit;
     position: relative;
-   
 }
 
 .top {
     height: 105px;
     overflow: hidden;
-   
 }
 
 .footer {
-    height: 135px;
+    height: 175px;
     width: 100%;
     position: absolute;
     bottom: 0;
-    
 }
 
 
@@ -72,15 +69,6 @@ body {
     border-radius: 15px;
     text-align: center;
 }
-
-/*.user_info span {
-    background: #FFF;
-    color: #32adbc;
-    font-size: 26px;
-    max-width: 177px;
-    border-radius: 15px;
-    text-align: center;   
-}*/
 
 .user_info p {
     color: #FFF;
@@ -132,12 +120,8 @@ body {
     font-size: 15px;
 }
 
-.chatroom_user .label-white:hover {
-    background-color: #cdc7c7;
-}
-
 .chatroom_user .label-white.active {
-    background-color: #cdc7c7;
+    background-color: #16ff5f;
 }
 
 .label-white[href]:hover,
@@ -213,20 +197,59 @@ body {
 /*--下方資源--*/
 
 .resource {
-    border: 2px #000 solid;
+    /* border: 2px #000 solid;*/
     height: inherit;
     /*position: absolute;
     bottom: 0;
     right: 0;*/
-    width: calc(100vw - 290px);
+    width: calc(100vw - 300px);
+    margin-left: 10px;
     /*left: 300px;*/
 }
 
 .resource_L {
-    width: 105px;
+    width: 120px;
     background: #32adbc;
     height: inherit;
     float: left;
+    text-align: center;
+    margin-right: 3px;
+}
+
+
+/*.resource_L img {
+    margin: 0 auto;
+    }*/
+
+.resource_L p {
+    color: #FFF;
+    margin-bottom: 0;
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+.resource_L .department {
+    font-size: 16px;
+}
+
+.resource_L .unit {
+    font-size: 13px;
+}
+
+.Detachments_badge {
+    padding: 4px 12px;
+    font-size: 16px;
+    background: #231815;
+}
+
+.Bit_badge {
+    padding: 4px 12px;
+    font-size: 16px;
+    background-color: #32adbc;
+    color: #FFF;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    text-align: center;
 }
 
 .resource_R {
@@ -239,6 +262,7 @@ body {
     overflow: hidden;
     margin: 0;
     padding: 0;
+    margin-bottom: 2px;
 }
 
 .resource_category li {
@@ -259,9 +283,13 @@ body {
     letter-spacing: 1px;
 }
 
+.resource_category li a {
+    text-decoration: none;
+}
+
 .resource_category li:hover,
 .resource_category li.active {
-    background: #;
+    background: #1e242f;
     color: #FFF;
 }
 
@@ -270,22 +298,29 @@ body {
     top: 0;
     left: 105px;*/
     overflow: hidden;
+    border: 2px #000 solid;
+    padding: 4px;
 }
 
 .resource_item {
     /*position: absolute;
     top: 40px;*/
     border: 2px #000 solid;
-    width: 102px;
-    height: 100px;
+    width: 104px;
+    /*height: 109px;*/
     /*left: 2px;*/
     float: left;
+    text-align: center;
+    /* margin-top: 2px; */
+    margin-right: 5px;
 }
 
 .resource_item img {
     /*position: absolute;
     top: 0;
     left: 12px;*/
+    margin-top: 4px;
+    background: #efefef;
 }
 
 .resource_item p {
@@ -295,6 +330,7 @@ body {
     top: 42px;*/
     font-weight: bold;
     width: 100px;
+    color: #231815;
 }
 
 .resource_item div {
@@ -302,10 +338,11 @@ body {
     /*position: absolute;
     top: 63px;
     left: 0px;*/
+    margin-top: -5px;
 }
 
 .resource_item div button {
-    padding: 1px 6px;
+    padding: 1px 4px;
 }
 
 .resource_item div input[type="text"] {
@@ -313,4 +350,103 @@ body {
     margin-right: -1px;
     width: 40px;
     text-align: center;
+}
+
+.button_box {
+    float: right;
+    margin-right: 15px;
+    height: 100px;
+}
+
+.button_box button {
+    line-height: 30px;
+    margin-top: 22px;
+}
+
+.btn_XL {
+    padding: 2px 20px;
+    border-radius: 20px;
+}
+
+.btn-black {
+    color: #fff;
+    background-color: #110c0a;
+    border-color: #231815;
+    font-size: 16px;
+}
+
+.btn-black:hover {
+    color: #fff;
+    background-color: #32adbc;
+    border-color: #227e89;
+}
+
+.btn-black:active,
+.btn-black.active,
+.open > .dropdown-toggle.btn-black {
+    color: #fff;
+    background-color: #32adbc;
+    border-color: #227e89;
+}
+
+.Requiredbox {
+    margin-top: -295px;
+    font-size: 30px;
+    margin-right: 10px;
+    text-align: right;
+}
+
+.Requiredbox .glyphicon {
+    cursor: pointer;
+    margin-right: 20px;
+    margin-top: 8px;
+    color: red;
+}
+
+.Requiredbox .glyphicon:hover {
+    box-shadow: 3px 3px 5px #888888;
+}
+
+.Required {
+    height: 220px;
+    width: 150px;
+    background: #231815;
+    margin-bottom: 2px;
+    padding-bottom: 10px;
+}
+
+.Required h3 {
+    color: #FFF;
+    font-size: 16px;
+    text-align: left;
+    text-indent: 15px;
+    line-height: 36px;
+}
+
+.Required ul {
+    padding: 0;
+    margin: 0;
+    margin-top: -5px;
+    overflow-y: scroll;
+    /* padding-bottom: 10px; */
+    margin-bottom: 10px;
+    width: 140px;
+    height: 160px;
+}
+
+.Required ul li {
+    color: #FFF;
+    font-size: 16px;
+    list-style: none;
+    text-align: left;
+    text-indent: 15px;
+}
+
+.triangle_icon {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 8px 8px 0 8px;
+    border-color: #231815 transparent transparent transparent;
+    margin-right: -24px;
 }

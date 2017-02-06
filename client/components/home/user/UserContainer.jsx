@@ -17,6 +17,7 @@ class UserContainer extends Component {
                 username={name}
                 avatar={avatar}
                 position={position}
+                onClick={this.props.onClick}
                 />
         )
     }
