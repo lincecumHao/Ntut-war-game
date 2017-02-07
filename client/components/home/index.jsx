@@ -34,6 +34,7 @@ class Home extends Component {
                     </div>
                     <System
                         display={this.state.systemDisplay}
+                        displaySystem={this.displaySystem}
                     />
                     <Chatroom />
                 </div>
