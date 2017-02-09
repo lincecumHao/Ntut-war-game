@@ -7,6 +7,12 @@
     outline: 14px solid #32adbc;
 }
 
+.popup-profile{
+    width: 1024px;
+    height: 480px;
+    margin: calc((100vh - 480px) / 2) auto;
+}
+
 .popup-overlay {
     position: fixed;
     top: 0;
@@ -66,7 +72,7 @@
     min-width: 1024px;
     max-width: 1200px;
     margin: 0 auto;
-    outline-offset: 7px;
+    border: 7px solid white;
     background-color: #32adbc;
     outline: 14px solid #32adbc;
 }

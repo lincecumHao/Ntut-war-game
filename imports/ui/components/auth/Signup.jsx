@@ -41,7 +41,8 @@ class Signup extends Component {
                     email
                 });
             } else if (user.services.facebook) {
-                let {name, email, gender, id} = user.services.facebook;
+                let {email, gender, id} = user.services.facebook;
+                let {name, position, seniority, age} = user.profile;
                 axios.get('https://graph.facebook.com/' + id + '/picture?type=large')
                     .then(res => {
                         this.setState({
@@ -50,7 +51,11 @@ class Signup extends Component {
                     });
                 this.setState({
                     gender,
-                    email
+                    email,
+                    position,
+                    seniority,
+                    age,
+                    username: name
                 });
             }
         }
@@ -98,6 +103,9 @@ class Signup extends Component {
                     });
                 } else {
                     this.props.router.push('/');
+                    if(this.props.callback){
+                        this.props.callback();
+                    }
                 }
             });
         } else {
@@ -155,7 +163,7 @@ class Signup extends Component {
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
                             </select>
-                            <select name="age" defaultValue="" onChange={this.onInputChange} className={classnames({ active: this.state.age.length })} >
+                            <select name="age" value={this.state.age} onChange={this.onInputChange} className={classnames({ active: this.state.age.length })} >
                                 <option value="" disabled hidden>&#xf2c0;  Range of age</option>
                                 <option value="under-20">Under 20</option>
                                 <option value="from-20-to-30">From 20 to 30</option>
@@ -164,7 +172,7 @@ class Signup extends Component {
                                 <option value="from-50-to-60">From 50 to 60</option>
                                 <option value="upper-60">Upper 60</option>
                             </select>
-                            <select name="seniority" defaultValue="" onChange={this.onInputChange} className={classnames({ active: this.state.seniority.length })} >
+                            <select name="seniority" value={this.state.seniority} onChange={this.onInputChange} className={classnames({ active: this.state.seniority.length })} >
                                 <option value="" disabled hidden>&#xf2c0;  Seniority</option>
                                 <option value="under-5">Under 5 years</option>
                                 <option value="from-5-to-10">From 5 to 10 years</option>
@@ -173,7 +181,7 @@ class Signup extends Component {
                                 <option value="from-20-to-25">From 20 to 25 years</option>
                                 <option value="upper-25">Upper 25 years</option>
                             </select>
-                            <select name="position" defaultValue="" required onChange={this.onInputChange} className={classnames({ active: this.state.position.length })} >
+                            <select name="position" value={this.state.position} required onChange={this.onInputChange} className={classnames({ active: this.state.position.length })} >
                                 <option value="" disabled hidden>&#xf041;  Position</option>
                                 <option value="p1">p1</option>
                                 <option value="p2">p2</option>
