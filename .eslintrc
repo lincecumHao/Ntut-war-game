@@ -36,6 +36,7 @@
   },
   "globals": {
     "google": true,
-    "MarkerWithLabel": true
+    "MarkerWithLabel": true,
+    "introJs": true
    }
 }
