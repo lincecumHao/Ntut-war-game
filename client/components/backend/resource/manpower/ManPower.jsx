@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
+import Nowuser from  './CurrentUsers.jsx';
 
 class ManPower extends Component {
     render() {
+        let {onlineUsers} = this.props;
         return (
             <div className="manpower_req">
-                <div className="Cur-users">登入總人數<span className="badge">530</span>人 &nbsp;
-                    <button className="btn btn-sm btn-black"><span className="glyphicon glyphicon-refresh"></span></button>
-                </div>
+                <Nowuser count={onlineUsers}/>
+                
                 <table className="Manpower-list">
                     <tbody>
                         <tr>
@@ -163,4 +165,11 @@ class ManPower extends Component {
     }
 }
 
-export default ManPower;
+export default createContainer(() => {
+    const users = Meteor.subscribe('userStatus');
+    const loading = !users.ready();
+    return {
+        onlineUsers: Meteor.users.find({'status.online': true }).fetch().length,
+        loading
+    }
+}, ManPower);

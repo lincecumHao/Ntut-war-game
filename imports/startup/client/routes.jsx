@@ -22,7 +22,7 @@ const authenticate = (nextState, replace) => {
 const checkIsAdmin = (nextState, replace) => {
   if (!Meteor.loggingIn() && !Meteor.userId()) {
     replace({
-      pathname: '/backend/resource',
+      pathname: '/auth/login',
       state: { nextPathname: nextState.location.pathname }
     });
   }
