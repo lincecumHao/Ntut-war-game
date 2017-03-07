@@ -30,3 +30,5 @@ reywood:publish-composite
 facebook-config-ui
 google-config-ui
 tmeasday:publish-counts
+meteorhacks:aggregate
+jcbernack:reactive-aggregate

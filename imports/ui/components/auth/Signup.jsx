@@ -3,6 +3,8 @@ import { Row, Col } from 'react-bootstrap';
 import { Accounts } from 'meteor/accounts-base';
 import { withRouter } from 'react-router';
 import FileBase64 from '../../../../client/components/utils/react-file-base64';
+import { createContainer } from 'meteor/react-meteor-data';
+import { Units } from '../../../../imports/collections/units.js';
 import classnames from 'classnames';
 import axios from 'axios';
 import Alert from 'react-s-alert';
@@ -36,6 +38,7 @@ class Signup extends Component {
             if (user.services.google) {
                 let {name, email, gender, picture} = user.services.google;
                 this.setState({
+                    username: name,
                     avatar: picture,
                     gender,
                     email
@@ -183,12 +186,11 @@ class Signup extends Component {
                             </select>
                             <select name="position" value={this.state.position} required onChange={this.onInputChange} className={classnames({ active: this.state.position.length })} >
                                 <option value="" disabled hidden>&#xf041;  Position</option>
-                                <option value="p1">p1</option>
-                                <option value="p2">p2</option>
-                                <option value="p3">p3</option>
-                                <option value="p4">p4</option>
-                                <option value="p5">p5</option>
-                                <option value="p6">p6</option>
+                                {
+                                    this.props.units.map((unit, index) => {
+                                        return(<option key={index} value={unit._id}>{unit.name}</option>)
+                                    })
+                                }
                             </select>
                         </Col>
                     </Row>
@@ -204,4 +206,11 @@ class Signup extends Component {
     }
 }
 
-export default withRouter(Signup);
+export default withRouter(createContainer(() => {
+    const units = Meteor.subscribe('units', null);
+    const loading = !units.ready();
+    return {
+        units: Units.find({}).fetch(),
+        loading
+    }
+}, Signup));
