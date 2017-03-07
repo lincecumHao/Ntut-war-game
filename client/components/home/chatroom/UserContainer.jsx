@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import User from './User.jsx';
-import { Units } from '../../../../imports/collections/units.js';
+import { Units, getUnitName } from '../../../../imports/collections/units.js';
 import { createContainer } from 'meteor/react-meteor-data';
 
 class UserContainer extends Component {
@@ -13,7 +13,7 @@ class UserContainer extends Component {
     renderUsers() {
         return this.props.onlineUsers.map(user => {
             let active = (user._id === this.props.sendTo ? true : false);
-            let unit = this.props.units.find({_id: user.profile.position}).fetch()[0].name;
+            let unit = getUnitName(user.profile.position);
             return (
                 <User
                     key={user._id}
@@ -22,7 +22,7 @@ class UserContainer extends Component {
                     name={user.profile.name}
                     onClickUser={this.props.onClickUser}
                     active={active}
-                    />
+                />
             );
         });
     }

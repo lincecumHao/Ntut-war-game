@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import User from './User.jsx';
-import { Units } from '../../../../imports/collections/units.js';
+import { Units, getUnitName } from '../../../../imports/collections/units.js';
 import { createContainer } from 'meteor/react-meteor-data';
 
 class UserContainer extends Component {
@@ -11,16 +11,16 @@ class UserContainer extends Component {
     }
 
     renderUser() {
-        let {name, avatar, position} = Meteor.user().profile;
-        let unit = this.props.units.find({_id: position}).fetch()[0].name;
-        if(!avatar || avatar.length == 0) avatar = './images/user_img.png';
+        let { name, avatar, position } = Meteor.user().profile;
+        let unit = getUnitName(position);
+        if (!avatar || avatar.length == 0) avatar = './images/user_img.png';
         return (
             <User
                 username={name}
                 avatar={avatar}
                 position={unit}
                 onClick={this.props.onClick}
-                />
+            />
         )
     }
 

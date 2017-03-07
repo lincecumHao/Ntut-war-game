@@ -1,6 +1,6 @@
 import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
-import { Units } from '../../../../imports/collections/units.js';
+import { getUnitName } from '../../../../imports/collections/units.js';
 
 const Message = ({ from, to, msg }) => (
     <p>
@@ -9,11 +9,7 @@ const Message = ({ from, to, msg }) => (
 );
 
 const formatUser = (user) => {
-    let units = Units.find({_id: user.profile.position}).fetch();
-    let unit = user.profile.position;
-    if(units.length){
-        unit = units[0].name;
-    }
+    let unit = getUnitName(user.profile.position);
     return unit + '[' + user.profile.name + ']';
 }
 

@@ -1,6 +1,16 @@
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 
+export const getUnitName = function(unitId){
+    let unit = Units.findOne({ _id: unitId });
+        if (unit) {
+            unit = unit.name;
+        } else {
+            unit = unitId;
+        }
+        return unit;
+}
+
 export const Units = new Mongo.Collection('units');
 
 Meteor.startup(function() {
