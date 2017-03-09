@@ -1,5 +1,6 @@
 import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
+import { getUnitName } from '../../../../imports/collections/units.js';
 
 const Message = ({ from, to, msg }) => (
     <p>
@@ -8,10 +9,12 @@ const Message = ({ from, to, msg }) => (
 );
 
 const formatUser = (user) => {
-    return user.profile.position + '[' + user.profile.name + ']';
+    let unit = getUnitName(user.profile.position);
+    return unit + '[' + user.profile.name + ']';
 }
 
 export default createContainer((props) => {
+    Meteor.subscribe('units', null);
     Meteor.subscribe('users', [props.from, props.to]);
     let users = Meteor.users.find({ _id: { $in: [props.from, props.to] } }).fetch();
     let from = formatUser(users.filter(user => {

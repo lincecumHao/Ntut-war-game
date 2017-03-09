@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import User from './User.jsx';
+import { Units } from '../../../../imports/collections/units.js';
 import { createContainer } from 'meteor/react-meteor-data';
 
 class UserContainer extends Component {
@@ -10,27 +11,33 @@ class UserContainer extends Component {
     }
 
     renderUser() {
-        let {name, avatar, position} = Meteor.user().profile;
-        if(!avatar || avatar.length == 0) avatar = './images/user_img.png';
+        let { name, avatar } = Meteor.user().profile;
+        if (!avatar || avatar.length == 0) avatar = './images/user_img.png';
         return (
             <User
                 username={name}
                 avatar={avatar}
-                position={position}
+                position={this.props.unit}
                 onClick={this.props.onClick}
-                />
+            />
         )
     }
 
     render() {
-        return this.props.loading ? <User /> : this.renderUser();
+        return this.props.loadingUser && this.props.loadingUnit ? <User /> : this.renderUser();
     }
 }
 
 export default createContainer(() => {
     const user = Meteor.subscribe('userData');
-    const loading = !user.ready();
+    const units = Meteor.subscribe('units', null);
+    const loadingUser = !user.ready();
+    const loadingUnit = !units.ready();
+    let unit = '';
+    if(!loadingUnit && !loadingUser){
+        unit = Units.findOne({ _id: Meteor.user().profile.position }).name;
+    }
     return {
-        user, loading
+        loadingUser, loadingUnit, user, unit
     }
 }, UserContainer);
