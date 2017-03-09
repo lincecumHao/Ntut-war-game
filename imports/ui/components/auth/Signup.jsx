@@ -210,7 +210,7 @@ export default withRouter(createContainer(() => {
     const units = Meteor.subscribe('units', null);
     const loading = !units.ready();
     return {
-        units: Units.find({}).fetch(),
+        units: Units.find({parent: null}).fetch(),
         loading
     }
 }, Signup));
