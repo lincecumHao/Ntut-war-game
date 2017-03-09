@@ -32,16 +32,16 @@ Meteor.startup(() => {
   render(
     <Router history={browserHistory}>
       <Route path="/" component={App}>
-        <IndexRoute name="index" component={Home} onEnter={authenticate} />
-        <Route name="auth" path="auth" component={Auth} >
-          <Route name="login" path="login" component={Login} />
-          <Route name="singup" path="singup" component={Signup} />
+        <IndexRoute component={Home} onEnter={authenticate} />
+        <Route path="/auth" component={Auth} >
+          <Route path="/auth/login" component={Login} />
+          <Route path="/auth/singup" component={Signup} />
         </Route>
-      </Route>
-      <Route path="/backend" component={Backend} onEnter={checkIsAdmin}>
-        <IndexRoute name="resource" component={Resource} />
-        <Route name="resource" path="resource" component={Resource} />
-        <Route name="stage" path="stage" component={Stage} />
+        <Route path="/backend" component={Backend} onEnter={checkIsAdmin}>
+          <IndexRoute component={Resource} />
+          <Route path="/backend/resource" component={Resource} />
+          <Route path="/backend/stage" component={Stage} />
+        </Route>
       </Route>
       <Redirect from="*" to="/" />
     </Router>,
