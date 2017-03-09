@@ -167,6 +167,22 @@
     margin-right: 3px;
 }
 
+.Manpower-list > tbody > tr {
+    cursor: pointer;
+}
+
+.Manpower-list > tbody > tr:hover {
+    background-color: lightgray;
+}
+
+.Manpower-list > tbody > tr.active {
+    background-color: lightskyblue;
+}
+
+.Manpower-list > tbody > tr.finish {
+    background-color: #dff0d8;
+}
+
 
 /*----右側 ------------------------------*/
 

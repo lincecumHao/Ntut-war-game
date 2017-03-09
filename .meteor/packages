@@ -32,3 +32,5 @@ google-config-ui
 tmeasday:publish-counts
 meteorhacks:aggregate
 jcbernack:reactive-aggregate
+houston:admin
+iron:router
