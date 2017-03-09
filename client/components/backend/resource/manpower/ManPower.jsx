@@ -1,175 +1,75 @@
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
-import Nowuser from  './CurrentUsers.jsx';
+import { Characters } from '../../../../../imports/collections/characters.js';
 
-class ManPower extends Component {
-    render() {
-        let {onlineUsers} = this.props;
-        return (
-            <div className="manpower_req">
-                <Nowuser count={onlineUsers}/>
-                
-                <table className="Manpower-list">
-                    <tbody>
-                        <tr>
-                            <th colSpan="2">單位</th>
-                            <th colSpan="2">登入人數</th>
-                            <th>已設定人數</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input name="" type="radio" value="" />
-                            </td>
-                            <td>秘書處</td>
-                            <td>
-                                <input name="" type="checkbox" value="" />
-                            </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人
-                        </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input name="" type="radio" value="" />
-                            </td>
-                            <td>北水處</td>
-                            <td>
-                                <input name="" type="checkbox" value="" />
-                            </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人
-                        </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input name="" type="radio" value="" />
-                            </td>
-                            <td>衛生局</td>
-                            <td>
-                                <input name="" type="checkbox" value="" />
-                            </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人
-                        </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input name="" type="radio" value="" />
-                            </td>
-                            <td>環保局</td>
-                            <td>
-                                <input name="" type="checkbox" value="" />
-                            </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人
-                        </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input name="" type="radio" value="" />
-                            </td>
-                            <td>翡管局</td>
-                            <td>
-                                <input name="" type="checkbox" value="" />
-                            </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人
-                        </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input name="" type="radio" value="" />
-                            </td>
-                            <td>消防局</td>
-                            <td>
-                                <input name="" type="checkbox" value="" />
-                            </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人
-                        </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input name="" type="radio" value="" />
-                            </td>
-                            <td>交通局</td>
-                            <td>
-                                <input name="" type="checkbox" value="" />
-                            </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人
-                        </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input name="" type="radio" value="" />
-                            </td>
-                            <td>都發局</td>
-                            <td>
-                                <input name="" type="checkbox" value="" />
-                            </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人
-                        </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input name="" type="radio" value="" />
-                            </td>
-                            <td>研考會</td>
-                            <td>
-                                <input name="" type="checkbox" value="" />
-                            </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人
-                        </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input name="" type="radio" value="" />
-                            </td>
-                            <td>中華電信
-                            <br />北區分公司</td>
-                            <td>
-                                <input name="" type="checkbox" value="" />
-                            </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人
-                        </td>
-                            <td>
-                                <input type="text" id="" maxLength="3" />人</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <button className="btn btn-sm btn-black pull-right "><span className="glyphicon glyphicon-ok"></span>&nbsp;完成設定</button>
-            </div>
-        );
+const ManPower = ({ unitName, changeActiveUnit, unitId, status, alreadySetCharacter, loginUserCount }) => (
+    <tr onClick={() => { changeActiveUnit(unitId); }} className={status}>
+        <td>
+        </td>
+        <td>{unitName}</td>
+        <td>
+        </td>
+        <td>
+            <span className="label label-primary">{loginUserCount} 人</span>
+        </td>
+        <td>
+            <span className="label label-info">{alreadySetCharacter} 人</span>
+        </td>
+    </tr>
+);
+
+ManPower.propTypes = {
+    unitName: PropTypes.string.isRequired,
+    unitId: PropTypes.string.isRequired,
+    changeActiveUnit: PropTypes.func.isRequired,
+    activeId: PropTypes.string
+};
+
+ManPower.defaultProps = {
+    unitName: ''
+};
+
+/**
+ * 找出已經/尚未設定過腳色的人數
+ * @param {*單位ID} unitId 
+ */
+const updateUserCharacterCount = function (unitId) {
+    let users = Meteor.users.find({ 'profile.position': unitId }).fetch();
+    let userIds = [];
+    users.forEach(user => {
+        userIds.push(user._id)
+    });
+    let character = Characters.find({ userId: { $in: userIds }, act: { $ne: [] } }).fetch();
+    return {
+        loginUserCount: users.length,
+        alreadySetCharacter: character.length
     }
 }
 
-export default createContainer(() => {
-    const users = Meteor.subscribe('userStatus');
-    const loading = !users.ready();
+export default createContainer((props) => {
+    const userData = Meteor.subscribe('userData');
+    const userStatus = Meteor.subscribe('userStatus');
+    const characters = Meteor.subscribe('characters');
+    const loading = !characters.ready();
+    const userDataLoading = !userStatus.ready();
+    const userStatusLoading = !userData.ready();
+    let { unitId, activeId } = props;
+    let loginUserCount = 0;
+    let alreadySetCharacter = 0;
+    if (!loading && !userDataLoading && !userStatusLoading) {
+        let obj = updateUserCharacterCount(unitId);
+        loginUserCount = obj.loginUserCount;
+        alreadySetCharacter = obj.alreadySetCharacter;
+    }
+    let status = '';
+    if (activeId === unitId) {
+        status = 'active';
+    } else if (alreadySetCharacter === loginUserCount) {
+        status = 'finish';
+    }
     return {
-        onlineUsers: Meteor.users.find({'status.online': true }).fetch().length,
-        loading
+        loginUserCount,
+        alreadySetCharacter,
+        status
     }
 }, ManPower);
