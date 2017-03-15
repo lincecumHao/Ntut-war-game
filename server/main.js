@@ -2,6 +2,7 @@ import './methods/users/UserMethod.js';
 import { Messages } from '../imports/collections/messages.js';
 import { Units } from '../imports/collections/units.js';
 import { Characters } from '../imports/collections/characters.js';
+import { Stages } from '../imports/collections/stages.js';
 import { check, Match } from 'meteor/check';
 
 Meteor.startup(() => {
@@ -23,6 +24,10 @@ Meteor.startup(() => {
     Meteor.publish('units', function(parent) {
         check(parent, Match.OneOf(String, null));
         return Units.find({});
+    });
+
+     Meteor.publish('stages', function() {
+        return Stages.find({});
     });
 
     Meteor.publish('characters', function() {
