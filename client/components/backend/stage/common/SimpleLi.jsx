@@ -11,4 +11,8 @@ SimpleLi.propTypes = {
     selectId: PropTypes.string
 };
 
+SimpleLi.defaultProps = {
+    onSelect: () => {}
+};
+
 export default SimpleLi;

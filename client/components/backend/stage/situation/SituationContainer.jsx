@@ -12,7 +12,7 @@ class SituationContainer extends Component {
                 <button><span className="glyphicon glyphicon-minus"></span></button>
                 <ul>
                     {
-                        situationList.map((situation, index) => {
+                        situationList.map((situation) => {
                             return (
                                 <SimpleLi
                                     key={situation.index}
@@ -41,6 +41,13 @@ export default createContainer((props) => {
         let stage = Stages.findOne({ _id: props.selectStage });
         if (stage) {
             situationList = stage.situations;
+
+            // Sort situation list, to make sure the seq is always in order.
+            situationList.sort((a, b) => {
+                if(a.index < b.index) return -1;
+                if(a.index > b.index) return 1;
+                return 0;
+            });
         }
     }
     return {

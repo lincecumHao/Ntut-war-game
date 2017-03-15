@@ -322,6 +322,7 @@
     padding-left: 5px;
     padding-right: 5px;
     margin-bottom: 3px;
+    cursor: pointer;
 }
 
 .situation-list ul li a { line-height: 32px;
