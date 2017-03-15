@@ -215,6 +215,7 @@
     min-width: 90px;
     padding-left: 10px;
     padding-right: 10px;
+    cursor: pointer;
 }
 
 .charact_tab li a {

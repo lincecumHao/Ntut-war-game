@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Stages } from '../../../../../imports/collections/stages.js';
-import Stage from './Stage.jsx';
+import SimpleLi from '../common/SimpleLi.jsx';
 
 class StageContainer extends Component {
     constructor(props) {
@@ -27,7 +27,7 @@ class StageContainer extends Component {
     }
 
     render() {
-        let { stageList } = this.props;
+        let { stageList, onStageSelect, selectStage } = this.props;
         return (
             <div className="stage-list">
                 <ul className="charact_tab">
@@ -35,9 +35,12 @@ class StageContainer extends Component {
                     {
                         stageList.map(stage => {
                             return (
-                                <Stage
+                                <SimpleLi
                                     key={stage._id}
-                                    index={stage.index + 1}
+                                    id={stage._id}
+                                    text={'演練第' + (stage.index + 1) + '階段'}
+                                    selectId={selectStage}
+                                    onSelect={onStageSelect}
                                 />
                             )
                         })
@@ -48,6 +51,11 @@ class StageContainer extends Component {
         );
     }
 }
+
+StageContainer.propTypes = {
+    onStageSelect: PropTypes.func.isRequired,
+    selectStage: PropTypes.string.isRequired
+};
 
 export default createContainer(() => {
     const stages = Meteor.subscribe('stages');
