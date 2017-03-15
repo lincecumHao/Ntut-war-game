@@ -19,7 +19,7 @@ Meteor.methods({
 export const Stages = new Mongo.Collection('stages');
 
 Meteor.startup(function() {
-    if (Stages.find({}).count() === 0) {
+    if (Stages.find({}).count() === 0 && Meteor.isServer) {
         [{
                 index: 0,
                 situations: [{

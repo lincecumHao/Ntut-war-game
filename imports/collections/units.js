@@ -14,7 +14,7 @@ export const getUnitName = function(unitId){
 export const Units = new Mongo.Collection('units');
 
 Meteor.startup(function() {
-    if (Units.find().count() === 0) {
+    if (Units.find().count() === 0 && Meteor.isServer) {
         [
             { 'name': 'Yakijo', 'manpower': 9, '消防車': 8, '救護車': 9, 'phone': '46-(199)135-3592', 'address': '5 Commercial Terrace', 'parent': null },
             { 'name': 'Trilith', 'manpower': 8, '消防車': 3, '救護車': 5, 'phone': '505-(679)394-0537', 'address': '676 South Lane', 'parent': null },
