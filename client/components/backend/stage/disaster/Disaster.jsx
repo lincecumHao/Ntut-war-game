@@ -56,7 +56,6 @@ class Disaster extends Component {
                         </tr>
                         <tr>
                             <td colSpan="3" style={{ 'paddingRight': '25px' }}>
-                                <button className="btn btn-sm btn-black ">下一步&nbsp;<span className="glyphicon glyphicon-chevron-right"></span></button>
                                 <button className="btn btn-sm btn-black">演練開始&nbsp;<span className="glyphicon glyphicon-share-alt"></span></button>
                             </td>
 
