@@ -501,6 +501,7 @@
 
 .resource-req_right table input[type=text] {
     width: 100px;
+    text-align: center;
 }
 
 .resource-req_right table button {

@@ -33,7 +33,10 @@ class Stage extends Component {
         let { selectedStage, selectedSituation } = this.state;
         if (this.state.selectedSituation !== '') {
             disaster = <Disaster />;
-            resource = <ResourceContainer />;
+            resource = <ResourceContainer
+                            selectedSituation={selectedSituation}
+                            selectStage={selectedStage}
+                        />;
         }
         return (
             <div className="backend_2_content">
