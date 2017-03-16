@@ -1,8 +1,24 @@
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
+const ADD = 1;
+const MINUS = -1;
 
 const getLastIndex = function() {
     return Stages.findOne({}, { sort: { index: -1 } }).index;
+}
+
+const updResUse = function(stageId, situationIndex, resId, flag) {
+    situationIndex = parseInt(situationIndex);
+    var updRes = {}; // create an empty object
+    updRes['situations.$.resources.' + resId] = flag;
+    Stages.update({
+            _id: stageId,
+            'situations.index': situationIndex
+        }, {
+            $inc: updRes
+        },
+        false,
+        true);
 }
 
 Meteor.methods({
@@ -18,15 +34,27 @@ Meteor.methods({
     },
     'situation.create': function(stageId) {
         check(stageId, String);
-        let stage = Stages.findOne({_id: stageId});
-        if(stage) {
+        let stage = Stages.findOne({ _id: stageId });
+        if (stage) {
             let nextIndex = stage.situations.length;
-            Stages.update({_id: stageId}, { $push: { situations: {index: nextIndex} } });
+            Stages.update({ _id: stageId }, { $push: { situations: { index: nextIndex } } });
         }
     },
     'situation.delete': function(stageId) {
         check(stageId, String);
-        Stages.update( { _id: stageId }, { $pop: { situations: 1 } } )
+        Stages.update({ _id: stageId }, { $pop: { situations: 1 } })
+    },
+    'situation.addResUse': function(stageId, situationIndex, resId) {
+        check(stageId, String);
+        check(situationIndex, String);
+        check(resId, String);
+        updResUse(stageId, situationIndex, resId, ADD);
+    },
+    'situation.minusResUse': function(stageId, situationIndex, resId) {
+        check(stageId, String);
+        check(situationIndex, String);
+        check(resId, String);
+        updResUse(stageId, situationIndex, resId, MINUS);
     }
 });
 

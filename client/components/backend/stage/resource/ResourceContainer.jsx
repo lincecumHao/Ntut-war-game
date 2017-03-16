@@ -21,8 +21,7 @@ class ResourceContainer extends Component {
     }
 
     render() {
-        let { resources, resTypes, usedCount, curRes } = this.props;
-        console.log(curRes);
+        let { resources, resTypes, usedCount, curRes, selectedSituation, selectStage } = this.props;
         let { selectRes } = this.state;
         let filteredRes = resources.filter(res => {
             return res.abbr === selectRes
@@ -75,6 +74,8 @@ class ResourceContainer extends Component {
                                                 avaliable={res.avaliable}
                                                 used={res.used}
                                                 use={curRes[res._id]}
+                                                selectStage={selectStage}
+                                                selectedSituation={selectedSituation}
                                             />
                                         )
                                     })
@@ -141,7 +142,6 @@ export default createContainer((props) => {
             });
             // Get resources.
             if (curSituation.length > 0) {
-                // 序列化資源
                 curRes = curSituation[0].resources;
             }
         }
