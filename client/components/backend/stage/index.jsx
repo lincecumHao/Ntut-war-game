@@ -8,30 +8,47 @@ class Stage extends Component {
     constructor(props) {
         super(props);
         this.onStageSelect = this.onStageSelect.bind(this);
+        this.onSituationSelect = this.onSituationSelect.bind(this);
         this.state = {
-            selectedStage: ''
+            selectedStage: '',
+            selectedSituation: ''
         }
     }
 
-    onStageSelect(stageId) {
+    onStageSelect(selectedStage) {
         this.setState({
-            selectedStage: stageId
+            selectedStage,
+            selectedSituation: ''
         });
     }
-    
+
+    onSituationSelect(selectedSituation) {
+        this.setState({
+            selectedSituation
+        });
+    }
+
     render() {
+        let disaster, resource;
+        let { selectedStage, selectedSituation } = this.state;
+        if (this.state.selectedSituation !== '') {
+            disaster = <Disaster />;
+            resource = <Resource />;
+        }
         return (
             <div className="backend_2_content">
                 <StageContainer
                     onStageSelect={this.onStageSelect}
-                    selectStage={this.state.selectedStage}
+                    selectStage={selectedStage}
                 />
                 <SituationContainer
-                    selectStage={this.state.selectedStage}
+                    onSituationSelect={this.onSituationSelect}
+                    selectStage={selectedStage}
+                    selectedSituation={selectedSituation}
                 />
                 <div className="deliver-container">
-                    <Disaster />
-                    <Resource />
+                    {disaster}
+                    {resource}
                 </div>
             </div>
         );

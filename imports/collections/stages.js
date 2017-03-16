@@ -1,8 +1,10 @@
 import { Mongo } from 'meteor/mongo';
+import { check } from 'meteor/check';
 
 const getLastIndex = function() {
-    return Stages.findOne({},{ sort: { index: -1 } }).index;
+    return Stages.findOne({}, { sort: { index: -1 } }).index;
 }
+
 Meteor.methods({
     'stage.create': function() {
         let stageObj = {
@@ -13,6 +15,18 @@ Meteor.methods({
     },
     'stage.delete': function() {
         Stages.remove({ index: getLastIndex() })
+    },
+    'situation.create': function(stageId) {
+        check(stageId, String);
+        let stage = Stages.findOne({_id: stageId});
+        if(stage) {
+            let nextIndex = stage.situations.length;
+            Stages.update({_id: stageId}, { $push: { situations: {index: nextIndex} } });
+        }
+    },
+    'situation.delete': function(stageId) {
+        check(stageId, String);
+        Stages.update( { _id: stageId }, { $pop: { situations: 1 } } )
     }
 });
 
