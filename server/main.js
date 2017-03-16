@@ -3,6 +3,8 @@ import { Messages } from '../imports/collections/messages.js';
 import { Units } from '../imports/collections/units.js';
 import { Characters } from '../imports/collections/characters.js';
 import { Stages } from '../imports/collections/stages.js';
+import { Disasters } from '../imports/collections/disasters';
+import { Resources } from '../imports/collections/resources';
 import { check, Match } from 'meteor/check';
 
 Meteor.startup(() => {
@@ -26,8 +28,16 @@ Meteor.startup(() => {
         return Units.find({});
     });
 
-     Meteor.publish('stages', function() {
+    Meteor.publish('stages', function() {
         return Stages.find({});
+    });
+
+    Meteor.publish('disasters', function() {
+        return Disasters.find({});
+    });
+    
+    Meteor.publish('resources', function() {
+        return Resources.find({});
     });
 
     Meteor.publish('characters', function() {

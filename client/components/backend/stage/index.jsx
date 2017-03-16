@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import StageContainer from './stage/StageContainer.jsx';
 import SituationContainer from './situation/SituationContainer.jsx';
 import Disaster from './disaster/Disaster.jsx';
-import Resource from './resource/Resource.jsx';
+import ResourceContainer from './resource/ResourceContainer.jsx';
 
 class Stage extends Component {
     constructor(props) {
@@ -33,7 +33,7 @@ class Stage extends Component {
         let { selectedStage, selectedSituation } = this.state;
         if (this.state.selectedSituation !== '') {
             disaster = <Disaster />;
-            resource = <Resource />;
+            resource = <ResourceContainer />;
         }
         return (
             <div className="backend_2_content">

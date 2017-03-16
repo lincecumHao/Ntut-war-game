@@ -167,19 +167,19 @@
     margin-right: 3px;
 }
 
-.Manpower-list > tbody > tr {
+.Manpower-list>tbody>tr {
     cursor: pointer;
 }
 
-.Manpower-list > tbody > tr:hover {
+.Manpower-list>tbody>tr:hover {
     background-color: lightgray;
 }
 
-.Manpower-list > tbody > tr.active {
+.Manpower-list>tbody>tr.active {
     background-color: lightskyblue;
 }
 
-.Manpower-list > tbody > tr.finish {
+.Manpower-list>tbody>tr.finish {
     background-color: #dff0d8;
 }
 
@@ -200,8 +200,6 @@
     margin-bottom: 2px;
     border-bottom: 1px solid #000;
 }
-
-
 
 .charact_tab li {
     /*width: 90px;*/
@@ -292,8 +290,15 @@
 
 /*-- 演練階段選單 --*/
 
-.stage-list { width: 100%; }
-.stage-list .charact_tab button{ width: 34px; height: 34px;    }
+.stage-list {
+    width: 100%;
+}
+
+.stage-list .charact_tab button {
+    width: 34px;
+    height: 34px;
+}
+
 
 /*----左側內容 ------------------------------*/
 
@@ -306,7 +311,6 @@
 .situation-list ul {
     margin: 0;
     padding: 0;
-
 }
 
 .situation-list ul li {
@@ -325,19 +329,27 @@
     cursor: pointer;
 }
 
-.situation-list ul li a { line-height: 32px;
+.situation-list ul li a {
+    line-height: 32px;
     color: #FFF;
     font-size: 16px;
     letter-spacing: 1px;
-    text-decoration: none;}
-
+    text-decoration: none;
+}
 
 .situation-list ul li:hover,
 .situation-list ul li.active {
     background: #1e242f;
     color: #FFF;
 }
-.situation-list button{ width: 30px;height: 30px;  margin-bottom: 2px;}
+
+.situation-list button {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 2px;
+}
+
+
 /*----右側 ------------------------------*/
 
 
@@ -443,6 +455,7 @@
     padding-left: 10px;
     padding-right: 10px;
     margin-bottom: 3px;
+    cursor: pointer;
 }
 
 .resource-req_left ul li a {
@@ -465,8 +478,8 @@
 .resource-req_right {
     margin-left: 90px;
     border: 1px solid #000;
-        height: calc(100vh - 210px);
-   
+    height: calc(100vh - 210px);
+    overflow-y: auto;
 }
 
 .resource-req_right table {
@@ -477,12 +490,12 @@
     font-size: 16px;
     font-weight: bold;
     text-align: center;
-    border-bottom:  1px solid #000;
+    border-bottom: 1px solid #000;
     line-height: 36px;
 }
-.resource-req_right table td {
-   height: 40px;
 
+.resource-req_right table td {
+    height: 40px;
     text-align: center;
 }
 
@@ -499,15 +512,16 @@
 }
 
 .resource-req_right table tr td:nth-child(2) {
-     min-width: 110px;
-}
-.resource-req_right table tr td:nth-child(2) input[type=text]{
-     width: 70px;
-     background: #000;
-     color: #fff;
-     border-color: #000;
+    min-width: 110px;
 }
 
+.resource-req_right table tr td:nth-child(2) input[type=text] {
+    width: 70px;
+    background: #000;
+    color: #fff;
+    border-color: #000;
+    text-align: center;
+}
 
 .resource-req_right table tr td:nth-child(3) {}
 
