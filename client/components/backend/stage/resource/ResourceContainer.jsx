@@ -142,7 +142,7 @@ export default createContainer((props) => {
             });
             // Get resources.
             if (curSituation.length > 0) {
-                curRes = curSituation[0].resources;
+                curRes = (curSituation[0].resources || {});
             }
         }
     }
