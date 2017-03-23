@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import StageContainer from './stage/StageContainer.jsx';
+import SituationListContainer from './situation/SituationListContainer.jsx';
 import SituationContainer from './situation/SituationContainer.jsx';
 import Disaster from './disaster/Disaster.jsx';
+import DisasterContainer from './disaster/DisasterContainer.jsx';
 import ResourceContainer from './resource/ResourceContainer.jsx';
 
 class Stage extends Component {
@@ -32,7 +34,10 @@ class Stage extends Component {
         let disaster, resource;
         let { selectedStage, selectedSituation } = this.state;
         if (this.state.selectedSituation !== '') {
-            disaster = <Disaster />;
+            disaster = <DisasterContainer
+                            selectedSituation={selectedSituation}
+                            selectStage={selectedStage}
+                        />;
             resource = <ResourceContainer
                             selectedSituation={selectedSituation}
                             selectStage={selectedStage}
@@ -44,15 +49,15 @@ class Stage extends Component {
                     onStageSelect={this.onStageSelect}
                     selectStage={selectedStage}
                 />
-                <SituationContainer
+                <SituationListContainer
                     onSituationSelect={this.onSituationSelect}
                     selectStage={selectedStage}
                     selectedSituation={selectedSituation}
                 />
-                <div className="deliver-container">
-                    {disaster}
-                    {resource}
-                </div>
+                <SituationContainer
+                    selectStage={selectedStage}
+                    selectedSituation={selectedSituation}
+                />
             </div>
         );
     }

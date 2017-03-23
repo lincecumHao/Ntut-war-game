@@ -1,87 +1,119 @@
 import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
+import { Resources } from '../../../../../imports/collections/resources';
 import { Stages } from '../../../../../imports/collections/stages.js';
-import SimpleLi from '../common/SimpleLi.jsx';
+import { Disasters } from '../../../../../imports/collections/disasters.js';
+import DisasterContainer from '../disaster/DisasterContainer.jsx';
+import ResourceContainer from '../resource/ResourceContainer.jsx';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 class SituationContainer extends Component {
-
-    constructor(props) {
-        super(props);
-        this.addSituation = this.addSituation.bind(this);
-        this.delSituation = this.delSituation.bind(this);
-    }
-
-    addSituation() {
-        Meteor.call('situation.create', this.props.selectStage, (err) => {
-            if (err) {
-                alert(err);
-            }
-        });
-    }
-
-    delSituation() {
-        Meteor.call('situation.delete', this.props.selectStage, (err) => {
-            if (err) {
-                alert(err);
-            }
-        });
-    }
-
     render() {
-        let { situationList, selectStage, onSituationSelect, selectedSituation } = this.props;
-        let addBtn, delBtn;
-        if (selectStage !== '') {
-            delBtn = <button onClick={this.delSituation}><span className="glyphicon glyphicon-minus"></span></button>;
-            addBtn = <button onClick={this.addSituation}><span className="glyphicon glyphicon-plus"></span></button>;
+        let { resources, resTypes, usedCount, curRes, disasters, situation, selectedSituation, selectStage } = this.props;
+        let disaster, resource;
+        let key = selectedSituation + '=' + selectStage;
+        if (selectStage && selectedSituation) {
+            disaster =
+                <DisasterContainer
+                    key={key + 'dis'}
+                    disasters={disasters}
+                    situation={situation}
+                    selectStage={selectStage}
+                    selectedSituation={selectedSituation}
+                />;
+            resource =
+                <ResourceContainer
+                    key={key + 'res'}
+                    resources={resources}
+                    resTypes={resTypes}
+                    usedCount={usedCount}
+                    curRes={curRes}
+                    selectStage={selectStage}
+                    selectedSituation={selectedSituation}
+                />
         }
         return (
-            <div className="situation-list">
-                {delBtn}
-                <ul>
-                    {
-                        situationList.map((situation) => {
-                            return (
-                                <SimpleLi
-                                    key={situation.index}
-                                    id={'' + situation.index}
-                                    text={'狀況' + (situation.index + 1)}
-                                    onSelect={onSituationSelect}
-                                    selectId={selectedSituation}
-                                />
-                            )
-                        })
-                    }
-                </ul>
-                {addBtn}
+            <div className="deliver-container">
+                <ReactCSSTransitionGroup transitionName="example" transitionAppear={true} transitionAppearTimeout={300} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
+                    {disaster}
+                    {resource}
+                </ReactCSSTransitionGroup>
             </div>
         );
     }
 }
 
-SituationContainer.propTypes = {
+ResourceContainer.propTypes = {
     selectStage: PropTypes.string.isRequired,
-    onSituationSelect: PropTypes.func.isRequired,
     selectedSituation: PropTypes.string.isRequired
 };
 
 export default createContainer((props) => {
-    const stages = Meteor.subscribe('stages');
-    const loadingStages = !stages.ready();
-    let situationList = [];
-    if (!loadingStages) {
-        let stage = Stages.findOne({ _id: props.selectStage });
-        if (stage) {
-            situationList = stage.situations;
+    const resource = Meteor.subscribe('resources');
+    const stage = Meteor.subscribe('stages');
+    const disaster = Meteor.subscribe('disasters');
+    const isResReady = resource.ready();
+    const isStageReady = stage.ready();
+    const isDisasterReady = disaster.ready();
 
-            // Sort situation list, to make sure the seq is always in order.
-            situationList.sort((a, b) => {
-                if (a.index < b.index) return -1;
-                if (a.index > b.index) return 1;
-                return 0;
+    let resources = [], resTypes = [], disasters = [];
+    let usedCount = {}, curRes = {}, situation = {};
+
+    if (isResReady && isStageReady && isDisasterReady) {
+        // When all subscribe is ready.
+
+        // Get all resources.
+        resources = Resources.find({}).fetch();
+
+        // Get all resource type.
+        resources.map(res => {
+            // Find all resource type.
+            if (resTypes.indexOf(res.abbr) == -1) {
+                resTypes.push(res.abbr);
+            }
+        });
+
+        // Count all res used count.
+        let stages = Stages.find({}).fetch();
+        // Get all used count.
+        stages.map(stage => {
+            if (stage.situations) {
+                stage.situations.map(situation => {
+                    if (situation.resources) {
+                        Object.keys(situation.resources).map(res_id => {
+                            if (!usedCount[res_id]) {
+                                usedCount[res_id] = situation.resources[res_id];
+                            } else {
+                                usedCount[res_id] = usedCount[res_id] + situation.resources[res_id];
+                            }
+                        })
+                    }
+                });
+            }
+        });
+
+        // Get all disasters.
+        disasters = Disasters.find({}).fetch();
+
+        let selectStage = Stages.findOne({ _id: props.selectStage });
+        let filteredSituation;
+        if (selectStage) {
+            // Get current situation.
+            filteredSituation = selectStage.situations.filter(situation => {
+                return situation.index == props.selectedSituation
             });
+            // Get resources.
+            if (filteredSituation.length) {
+                // Current situation.
+                situation = (filteredSituation[0] || {});
+
+                // Current situation resource
+                curRes = (situation.resources || {});
+            }
         }
+
     }
     return {
-        loadingStages, situationList
+        resources, resTypes, usedCount, curRes, disasters, situation
     }
 }, SituationContainer);

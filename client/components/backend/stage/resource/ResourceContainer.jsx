@@ -1,9 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { Resources } from '../../../../../imports/collections/resources';
-import { Stages } from '../../../../../imports/collections/stages.js';
-import { createContainer } from 'meteor/react-meteor-data';
-import SimpleLi from '../common/SimpleLi.jsx';
 import Resource from './Resource.jsx';
+import ResourceTypeList from './ResourceTypeList.jsx';
 
 class ResourceContainer extends Component {
     constructor(props) {
@@ -38,21 +35,11 @@ class ResourceContainer extends Component {
                 <div className="resource-req_top">資源設定</div>
                 <div className="resource-req_main">
                     <div className="resource-req_left">
-                        <ul>
-                            {
-                                resTypes.map((type, index) => {
-                                    return (
-                                        <SimpleLi
-                                            key={index}
-                                            id={type}
-                                            text={type}
-                                            onSelect={this.onResSelected}
-                                            selectId={selectRes}
-                                        />
-                                    )
-                                })
-                            }
-                        </ul>
+                        <ResourceTypeList
+                            resTypes={resTypes}
+                            selectRes={selectRes}
+                            onResSelected={this.onResSelected}
+                        />
                     </div>
                     <div className="resource-req_right">
                         <table>
@@ -94,59 +81,18 @@ class ResourceContainer extends Component {
 
 ResourceContainer.propTypes = {
     selectStage: PropTypes.string.isRequired,
-    selectedSituation: PropTypes.string.isRequired
+    selectedSituation: PropTypes.string.isRequired,
+    resources: PropTypes.array,
+    resTypes: PropTypes.array,
+    usedCount: PropTypes.object,
+    curRes: PropTypes.object
 };
 
-export default createContainer((props) => {
-    const resource = Meteor.subscribe('resources');
-    const stage = Meteor.subscribe('stages');
-    const loadingResources = !resource.ready();
-    const loadingStages = !stage.ready();
-    let resources = [];
-    let resTypes = [];
-    let usedCount = {};
-    let curRes = {};
-    if (!loadingResources && !loadingStages) {
-        resources = Resources.find({}).fetch();
-        let stages = Stages.find({}).fetch();
-        resources.map(res => {
-            // Find all resource type.
-            if (resTypes.indexOf(res.abbr) == -1) {
-                resTypes.push(res.abbr);
-            }
-        });
+ResourceContainer.defaultProps = {
+    resources: [],
+    resTypes: [],
+    usedCount: {},
+    curRes: {}
+}
 
-        // Get all used count.
-        stages.map(stage => {
-            if (stage.situations) {
-                stage.situations.map(situation => {
-                    if (situation.resources) {
-                        Object.keys(situation.resources).map(res_id => {
-                            if (!usedCount[res_id]) {
-                                usedCount[res_id] = situation.resources[res_id];
-                            } else {
-                                usedCount[res_id] = usedCount[res_id] + situation.resources[res_id];
-                            }
-                        })
-                    }
-                });
-            }
-        });
-
-        // let curSit = Stages.find({ _id: props.selectStage }, { fields: { situations: { $elemMatch: { 'index': 1 } } } }).fetch();
-        let selectStage = Stages.findOne({ _id: props.selectStage });
-        if (selectStage) {
-            // Get current situation.
-            let curSituation = selectStage.situations.filter(situation => {
-                return situation.index == props.selectedSituation
-            });
-            // Get resources.
-            if (curSituation.length > 0) {
-                curRes = (curSituation[0].resources || {});
-            }
-        }
-    }
-    return {
-        resources, resTypes, usedCount, curRes
-    }
-}, ResourceContainer);
+export default ResourceContainer;

@@ -55,6 +55,36 @@ Meteor.methods({
         check(situationIndex, String);
         check(resId, String);
         updResUse(stageId, situationIndex, resId, MINUS);
+    },
+    'situation.update': function(stageId, situationIndex, situation) {
+        check(stageId, String);
+        check(situationIndex, String);
+        check(situation, Object);
+        let updType = {};
+        updType['situations.$'] = situation;
+        Stages.update({
+            _id: stageId,
+            'situations.index': parseInt(situationIndex)
+        }, {
+            $set: updType
+        },
+        false,
+        true);
+    },
+    'situation.changeType': function(stageId, situationIndex, typeId) {
+        check(stageId, String);
+        check(situationIndex, String);
+        check(typeId, String);
+        let updType = {};
+        updType['situations.$.type'] = typeId;
+        Stages.update({
+            _id: stageId,
+            'situations.index': parseInt(situationIndex)
+        }, {
+            $set: updType
+        },
+        false,
+        true);
     }
 });
 
