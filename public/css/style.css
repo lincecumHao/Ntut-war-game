@@ -1,3 +1,108 @@
+.popup-modal-black h1 {
+    color: white;
+    font-weight: bolder;
+}
+
+.popup-modal-black h3 {
+    color: white;
+    font-weight: bolder;
+}
+
+.popup-modal-black .title {
+    text-align: center;
+    height: 40px
+}
+
+.popup-modal-black .content {
+    height: 180px
+}
+
+.popup-modal-black .btns {
+    padding-left: 20px;
+}
+
+.popup-modal-black button {
+    border-radius: 20px;
+    color: #240444;
+    font-size: 17px;
+    background: #ffffff;
+    text-decoration: none;
+    width: 70px;
+}
+
+.popup-modal-black button:hover {
+    background: #3cb0fd;
+    text-decoration: none;
+}
+
+.popup-modal-black .divider {
+    width: 140px;
+    height: auto;
+    display: inline-block;
+}
+
+.popup-modal-black {
+    width: 360px;
+    height: 340px;
+    padding: 10px;
+    margin: calc((100vh - 340px) / 2) auto;
+    border: 7px solid white;
+    background-color: #240444;
+    outline: 14px solid #240444;
+}
+
+.popup-profile-black {
+    width: 360px;
+    height: 340px;
+    margin: calc((100vh - 340px) / 2) auto;
+}
+
+.popup-overlay-black {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.example-enter {
+    opacity: 0.01;
+}
+
+.example-enter.example-enter-active {
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+.example-leave {
+    opacity: 1;
+}
+
+.example-leave.example-leave-active {
+    opacity: 0.01;
+    transition: opacity .5s ease-in;
+}
+
+.example-appear {
+    opacity: 0.01;
+    transition: opacity .5s ease-in;
+}
+
+.example-appear.example-appear-active {
+    opacity: 1;
+}
+
+.suggest-poi {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.suggest-poi .list-group .list-group-item {
+    padding: 5px 15px;
+    cursor: pointer;
+}
+
 .popup-modal {
     width: 800px;
     height: 200px;
@@ -7,7 +112,7 @@
     outline: 14px solid #32adbc;
 }
 
-.popup-profile{
+.popup-profile {
     width: 1024px;
     height: 480px;
     margin: calc((100vh - 480px) / 2) auto;
