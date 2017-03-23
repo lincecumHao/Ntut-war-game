@@ -3,6 +3,7 @@ import { Messages } from '../imports/collections/messages.js';
 import { Units } from '../imports/collections/units.js';
 import { Characters } from '../imports/collections/characters.js';
 import { Stages } from '../imports/collections/stages.js';
+import { Script } from '../imports/collections/script.js';
 import { Disasters } from '../imports/collections/disasters';
 import { Resources } from '../imports/collections/resources';
 import { check, Match } from 'meteor/check';
@@ -38,6 +39,10 @@ Meteor.startup(() => {
     
     Meteor.publish('resources', function() {
         return Resources.find({});
+    });
+
+    Meteor.publish('script', function() {
+        return Script.find({});
     });
 
     Meteor.publish('characters', function() {
