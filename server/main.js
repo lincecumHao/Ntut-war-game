@@ -50,13 +50,13 @@ Meteor.startup(() => {
 
         var subHandle = Characters.find({}).observeChanges({
             added: function(id, fields) {
-                self.added("characters", id, fields);
+                self.added('characters', id, fields);
             },
             changed: function(id, fields) {
-                self.changed("characters", id, fields);
+                self.changed('characters', id, fields);
             },
             removed: function(id) {
-                self.removed("characters", id);
+                self.removed('characters', id);
             }
         });
 
