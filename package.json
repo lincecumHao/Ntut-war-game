@@ -16,7 +16,8 @@
     "react-modal": "^1.6.5",
     "react-router": "^3.0.0",
     "react-s-alert": "^1.2.2",
-    "react-select": "^1.0.0-rc.3"
+    "react-select": "^1.0.0-rc.3",
+    "react-transition-group": "^1.1.1"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",

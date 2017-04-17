@@ -6,6 +6,7 @@ import { Disasters } from '../../../../../imports/collections/disasters.js';
 import DisasterContainer from '../disaster/DisasterContainer.jsx';
 import ResourceContainer from '../resource/ResourceContainer.jsx';
 import ReactCSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
+// import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
 
 class SituationContainer extends Component {
     render() {
