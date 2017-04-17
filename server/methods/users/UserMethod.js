@@ -41,6 +41,12 @@ Meteor.startup(() => {
                     profile: Object.assign({}, Meteor.user().profile, extraProps)
                 }
             });
+        },
+        'userInfo': function() {
+            return Meteor.users.aggregate([
+                { $match: { _id: this.userId } },
+                { $lookup: { from: 'units', localField: 'profile.position', foreignField: '_id', as: 'profile.unit' } }
+            ])[0];
         }
     });
 });
