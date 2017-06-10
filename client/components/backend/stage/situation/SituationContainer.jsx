@@ -1,11 +1,12 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Resources } from '../../../../../imports/collections/resources';
 import { Stages } from '../../../../../imports/collections/stages.js';
 import { Disasters } from '../../../../../imports/collections/disasters.js';
 import DisasterContainer from '../disaster/DisasterContainer.jsx';
 import ResourceContainer from '../resource/ResourceContainer.jsx';
-import ReactCSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
+import TransitionGroup  from 'react-transition-group';
 // import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
 
 class SituationContainer extends Component {
@@ -35,10 +36,10 @@ class SituationContainer extends Component {
         }
         return (
             <div className="deliver-container">
-                <ReactCSSTransitionGroup transitionName="example" transitionAppear={true} transitionAppearTimeout={300} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
+                <TransitionGroup transitionName="example" transitionAppear={true} transitionAppearTimeout={300} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
                     {disaster}
                     {resource}
-                </ReactCSSTransitionGroup>
+                </TransitionGroup>
             </div>
         );
     }

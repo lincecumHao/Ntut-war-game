@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const SimpleLi = ({ id, text, onSelect, selectId }) => (
     <li onClick={() => { onSelect(id) }} className={(selectId == id ? 'active' : '')}><a>{text}</a></li>

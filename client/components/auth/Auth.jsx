@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Auth = ({ children }) => (
     <div>
@@ -12,7 +13,7 @@ const Auth = ({ children }) => (
 );
 
 Auth.propTypes = {
-    children: React.PropTypes.node
+    children: PropTypes.node
 };
 
 export default Auth;

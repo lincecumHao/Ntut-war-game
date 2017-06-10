@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Nav from './nav/Nav.jsx';
 import NotifyModal from '../utils/NotifyModal.jsx';
 import { browserHistory } from 'react-router';
@@ -49,7 +50,7 @@ class Backend extends Component {
 }
 
 Backend.propTypes = {
-    children: React.PropTypes.node
+    children: PropTypes.node
 };
 
 export default Backend;

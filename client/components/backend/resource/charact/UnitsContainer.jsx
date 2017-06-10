@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Units } from '../../../../../imports/collections/units.js';
 import { Characters } from '../../../../../imports/collections/characters.js';
 import { createContainer } from 'meteor/react-meteor-data';

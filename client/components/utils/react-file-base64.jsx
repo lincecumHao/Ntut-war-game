@@ -5,7 +5,8 @@
 *
 */
 
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 class FileBase64 extends React.Component {
 

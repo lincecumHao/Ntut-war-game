@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const User = ({ avatar, username, position, onClick }) => (
     <div className="user">

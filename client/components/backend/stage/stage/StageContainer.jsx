@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Stages } from '../../../../../imports/collections/stages.js';
 import SimpleLi from '../common/SimpleLi.jsx';

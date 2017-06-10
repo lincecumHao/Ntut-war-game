@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react';
-
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const Equipment = ({id, img, current, count, updateCurrent}) => (
     <div className="resource_item">

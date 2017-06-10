@@ -1,8 +1,9 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import About from './About.jsx';
 import ProfileEditor from './ProfileEditor.jsx';
 import { withRouter } from 'react-router';
-import ReactModal from 'react-modal';
+// import ReactMod from 'react-modal';
 
 class System extends Component {
 

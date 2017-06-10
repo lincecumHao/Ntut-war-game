@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const CurrentUsers = ({ count }) => (
     <div className="Cur-users">
@@ -8,7 +9,7 @@ const CurrentUsers = ({ count }) => (
 );
 
 CurrentUsers.propTypes = {
-    count: React.PropTypes.number
+    count: PropTypes.number
 };
 
 CurrentUsers.defaultProps = {

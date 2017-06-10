@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Resource from './Resource.jsx';
 import ResourceTypeList from './ResourceTypeList.jsx';
 

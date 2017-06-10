@@ -1,5 +1,6 @@
 import React from 'react';
 import Alert from 'react-s-alert';
+import PropTypes from 'prop-types';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/scale.css';
 
@@ -11,7 +12,7 @@ const App = ({ children }) => (
 );
 
 App.propTypes = {
-    children: React.PropTypes.node
+    children: PropTypes.node
 };
 
 export default App;

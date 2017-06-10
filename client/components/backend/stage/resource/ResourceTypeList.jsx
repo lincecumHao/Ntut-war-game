@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import SimpleLi from '../common/SimpleLi.jsx';
 
 const ResourceTypeList = ({ resTypes, selectRes, onResSelected }) => (
