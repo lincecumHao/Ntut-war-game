@@ -9,6 +9,7 @@ const Message = ({ from, to, msg }) => (
 );
 
 const formatUser = (user) => {
+    if(!user) return '';
     let unit = getUnitName(user.profile.position);
     return unit + '[' + user.profile.name + ']';
 }

@@ -30,7 +30,6 @@ class Signup extends Component {
         }
     }
 
-
     componentWillMount() {
         // If user exist, let user fill up the profile.
         let user = Meteor.user();
@@ -44,21 +43,16 @@ class Signup extends Component {
                     email
                 });
             } else if (user.services.facebook) {
-                let {email, gender, id} = user.services.facebook;
-                let {name, position, seniority, age} = user.profile;
-                axios.get('https://graph.facebook.com/' + id + '/picture?type=large')
+                axios.get('https://graph.facebook.com/' + user.services.facebook.id + '/picture?type=large')
                     .then(res => {
                         this.setState({
                             avatar: res.request.responseURL
                         });
                     });
                 this.setState({
-                    gender,
-                    email,
-                    position,
-                    seniority,
-                    age,
-                    username: name
+                    gender: user.services.facebook.gender,
+                    email: user.services.facebook.email,
+                    username: user.services.facebook.name
                 });
             }
         }

@@ -14,7 +14,7 @@ Meteor.methods({
         let doc = Characters.findOne({ userId: characterMap.userId });
 
         // Insert or Update.
-        doc ? Characters.update({ userId: characterMap.userId }, { $set: obj }) : Characters.insert(obj);;
+        doc ? Characters.update({ userId: characterMap.userId }, { $set: obj }) : Characters.insert(obj);
     },
     'characters.delete': function(userIds) {
         check(userIds, [String]);

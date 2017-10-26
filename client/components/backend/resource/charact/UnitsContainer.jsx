@@ -56,7 +56,8 @@ const formatSelectedUnit = function (units) {
 
 let totalUnits = [];
 const loadUnits = function (parentId, index) {
-    let units = Units.find({ parent: parentId }).fetch();
+    var parent = Units.findOne({ _id: parentId });
+    let units = Units.find({ parent: parent.name }).fetch();
     let prefix = '';
     for (let i = 0; i < index; i++) {
         prefix += '-';

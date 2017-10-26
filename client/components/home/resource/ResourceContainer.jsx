@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Depart from './Depart.jsx';
+import DepartContainer from './DepartContainer.jsx';
 import RequireEQ from './RequireEQ.jsx';
 import Equipment from './Equipment.jsx';
 import update from 'react-addons-update';
@@ -49,7 +49,7 @@ class ResourceContainer extends Component {
     render() {
         return (
             <div className="resource">
-                <Depart />
+                <DepartContainer />
                 <div className="resource_R">
                     <ul className="resource_category">
                         <li><a href="active">車種 01</a></li>

@@ -6,7 +6,7 @@ import { Stages } from '../../../../../imports/collections/stages.js';
 import { Disasters } from '../../../../../imports/collections/disasters.js';
 import DisasterContainer from '../disaster/DisasterContainer.jsx';
 import ResourceContainer from '../resource/ResourceContainer.jsx';
-import TransitionGroup  from 'react-transition-group';
+import Transition from 'react-transition-group/Transition';
 // import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
 
 class SituationContainer extends Component {
@@ -36,10 +36,8 @@ class SituationContainer extends Component {
         }
         return (
             <div className="deliver-container">
-                <TransitionGroup transitionName="example" transitionAppear={true} transitionAppearTimeout={300} transitionEnterTimeout={300} transitionLeaveTimeout={300}>
-                    {disaster}
-                    {resource}
-                </TransitionGroup>
+            {disaster}
+            {resource}
             </div>
         );
     }
@@ -70,8 +68,8 @@ export default createContainer((props) => {
         // Get all resource type.
         resources.map(res => {
             // Find all resource type.
-            if (resTypes.indexOf(res.abbr) == -1) {
-                resTypes.push(res.abbr);
+            if (resTypes.indexOf(res.type) == -1) {
+                resTypes.push(res.type);
             }
         });
 
@@ -113,7 +111,6 @@ export default createContainer((props) => {
                 curRes = (situation.resources || {});
             }
         }
-
     }
     return {
         resources, resTypes, usedCount, curRes, disasters, situation

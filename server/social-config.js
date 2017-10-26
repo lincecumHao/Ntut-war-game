@@ -10,9 +10,9 @@ ServiceConfiguration.configurations.upsert({
     service: 'facebook'
 }, {
     $set: {
-        appId: '181668918970090',
+        appId: '293748341032599',
         loginStyle: 'popup',
-        secret: '3e30bce75d288d4b5f3a2a5545f90f8b'
+        secret: '72ac9a40a9305785c39b743ae07f8345'
     }
 });
 

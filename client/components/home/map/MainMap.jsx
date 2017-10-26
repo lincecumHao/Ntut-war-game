@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-var MarkerWithLabel = require('markerwithlabel')(google.maps);
 
 class MainMap extends Component {
 
@@ -8,9 +7,11 @@ class MainMap extends Component {
         this.mainMap = null;
         this.eagleMap = null;
         this.createMarker = this.createMarker.bind(this);
+        this.MarkerWithLabel;
     }
 
     componentDidMount() {
+        MarkerWithLabel = require('markerwithlabel')(google.maps);
         this.mainMap = new google.maps.Map(document.getElementById('mainMap'), {
             center: { lat: 25.045552, lng: 121.531083 },
             zoom: 13,

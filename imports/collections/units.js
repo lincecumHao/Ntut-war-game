@@ -1,21 +1,108 @@
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 
-export const getUnitName = function(unitId){
+export const getUnitName = function (unitId) {
     let unit = Units.findOne({ _id: unitId });
-        if (unit) {
-            unit = unit.name;
-        } else {
-            unit = unitId;
-        }
-        return unit;
+    return (unit ? unit.name : unitId);
 }
 
 export const Units = new Mongo.Collection('units');
 
-Meteor.startup(function() {
+Meteor.startup(function () {
     if (Units.find().count() === 0 && Meteor.isServer) {
         [
+            {
+                name: '消防局',
+                phone: '46-(199)135-3592',
+                parent: null,
+                manpower: 9,
+                resources: [
+                    { type: '裝備', id: '3025', name: '呼吸器組', avaliable: getRandomInt(1, 100) },
+                    { type: '裝備', id: '3026', name: '護目鏡', avaliable: getRandomInt(1, 100) },
+                    { type: '車輛', id: '4001', name: '堆高機', avaliable: getRandomInt(1, 100) }
+                ]
+            },
+            {
+                name: '第三救護大隊',
+                phone: '46-(199)135-3592',
+                parent: '消防局',
+                manpower: 9,
+                resources: [
+                    { type: '裝備', id: '3025', name: '呼吸器組', avaliable: getRandomInt(1, 100) },
+                    { type: '裝備', id: '3026', name: '護目鏡', avaliable: getRandomInt(1, 100) },
+                    { type: '車輛', id: '4001', name: '堆高機', avaliable: getRandomInt(1, 100) }
+                ]
+            },
+            {
+                name: '信義中隊',
+                phone: '46-(199)135-3592',
+                parent: '第三救護大隊',
+                manpower: 9,
+                resources: [
+                    { type: '裝備', id: '3025', name: '呼吸器組', avaliable: getRandomInt(1, 100) },
+                    { type: '裝備', id: '3026', name: '護目鏡', avaliable: getRandomInt(1, 100) },
+                    { type: '車輛', id: '4001', name: '堆高機', avaliable: getRandomInt(1, 100) }
+
+                ]
+            },
+            {
+                name: '忠孝中隊',
+                phone: '46-(199)135-3592',
+                parent: '第三救護大隊',
+                manpower: 9,
+                resources: [
+                    { type: '裝備', id: '3025', name: '呼吸器組', avaliable: getRandomInt(1, 100) },
+                    { type: '裝備', id: '3026', name: '護目鏡', avaliable: getRandomInt(1, 100) },
+                    { type: '車輛', id: '4001', name: '堆高機', avaliable: getRandomInt(1, 100) }
+
+                ]
+            },
+            {
+                name: '信義分隊',
+                phone: '46-(199)135-3592',
+                parent: '信義中隊',
+                manpower: 9,
+                resources: [
+                    { type: '人力', id: '1001', name: '搜救人員' },
+                    { type: '人力', id: '1002', name: '消防人員' },
+                    { type: '物品', id: '2002', name: '屍袋', avaliable: getRandomInt(1, 100) },
+                    { type: '物品', id: '2003', name: '冰櫃', avaliable: getRandomInt(1, 100) },
+                    { type: '裝備', id: '3004', name: '救命器', avaliable: getRandomInt(1, 100) },
+                    { type: '裝備', id: '3005', name: '無線電對講機', avaliable: getRandomInt(1, 100) },
+                    { type: '裝備', id: '3006', name: '衛星電話', avaliable: getRandomInt(1, 100) },
+                    { type: '裝備', id: '3007', name: '抽水機', avaliable: getRandomInt(1, 100) },
+                    { type: '裝備', id: '3024', name: '錨子', avaliable: getRandomInt(1, 100) },
+                    { type: '裝備', id: '3025', name: '呼吸器組', avaliable: getRandomInt(1, 100) },
+                    { type: '裝備', id: '3026', name: '護目鏡', avaliable: getRandomInt(1, 100) },
+                    { type: '車輛', id: '4001', name: '堆高機', avaliable: getRandomInt(1, 100) },
+                    { type: '車輛', id: '4002', name: '推土機', avaliable: getRandomInt(1, 100) },
+                    { type: '車輛', id: '4003', name: '鏟裝機', avaliable: getRandomInt(1, 100) }
+                ]
+            },
+            {
+                name: '忠孝分隊',
+                phone: '46-(199)135-3592',
+                parent: '忠孝中隊',
+                manpower: 9,
+                resources: [
+                    { type: '人力', id: '1004', name: '志工', avaliable: getRandomInt(1, 100) },
+                    { type: '人力', id: '1005', name: '搜救犬', avaliable: getRandomInt(1, 100) },
+                    { type: '人力', id: '1006', name: '工程人員', avaliable: getRandomInt(1, 100) },
+                    { type: '物品', id: '2001', name: '大型太空包', avaliable: getRandomInt(1, 100) },
+                    { type: '物品', id: '2002', name: '屍袋', avaliable: getRandomInt(1, 100) },
+                    { type: '物品', id: '2003', name: '冰櫃', avaliable: getRandomInt(1, 100) },
+                    { type: '裝備', id: '3011', name: '排煙機', avaliable: getRandomInt(1, 100) },
+                    { type: '裝備', id: '3012', name: '照明燈', avaliable: getRandomInt(1, 100) },
+                    { type: '裝備', id: '3013', name: '口罩', avaliable: getRandomInt(1, 100) },
+                    { type: '裝備', id: '3014', name: '電鋸', avaliable: getRandomInt(1, 100) },
+                    { type: '裝備', id: '3015', name: '圓盤切割器', avaliable: getRandomInt(1, 100) },
+                    { type: '車輛', id: '4013', name: '垃圾車', avaliable: getRandomInt(1, 100) },
+                    { type: '車輛', id: '4014', name: '資源回收車', avaliable: getRandomInt(1, 100) },
+                    { type: '車輛', id: '4015', name: '照明車', avaliable: getRandomInt(1, 100) },
+                    { type: '車輛', id: '4016', name: '灑水車', avaliable: getRandomInt(1, 100) },
+                    { type: '車輛', id: '4017', name: '救生艇', avaliable: getRandomInt(1, 100) }
+                ]
+            },
             { 'name': 'Yakijo', 'manpower': 9, '消防車': 8, '救護車': 9, 'phone': '46-(199)135-3592', 'address': '5 Commercial Terrace', 'parent': null },
             { 'name': 'Trilith', 'manpower': 8, '消防車': 3, '救護車': 5, 'phone': '505-(679)394-0537', 'address': '676 South Lane', 'parent': null },
             { 'name': 'Kwideo', 'manpower': 15, '消防車': 4, '救護車': 20, 'phone': '594-(351)435-5993', 'address': '8 Del Mar Alley', 'parent': null },
@@ -37,8 +124,14 @@ Meteor.startup(function() {
             { 'name': 'Devpoint', 'manpower': 6, '消防車': 9, '救護車': 20, 'phone': '62-(555)311-1329', 'address': '7746 Mockingbird Point', 'parent': 'Janyx' },
             { 'name': 'Twinder', 'manpower': 14, '消防車': 20, '救護車': 3, 'phone': '62-(993)618-2935', 'address': '8229 Huxley Junction', 'parent': 'Janyx' }
         ]
-        .forEach(function(unit) {
-            Units.insert(unit);
-        });
+            .forEach(function (unit) {
+                Units.insert(unit);
+            });
     }
 });
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
+}

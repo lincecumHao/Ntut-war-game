@@ -24,8 +24,7 @@ Meteor.startup(() => {
         }
     });
 
-    Meteor.publish('units', function(parent) {
-        check(parent, Match.OneOf(String, null));
+    Meteor.publish('units', function() {
         return Units.find({});
     });
 

@@ -34,6 +34,7 @@ Meteor.startup(() => {
       <Route path="/" component={App}>
         <IndexRoute component={Home} onEnter={authenticate} />
         <Route path="/auth" component={Auth} >
+          <IndexRoute component={Login}/>
           <Route path="/auth/login" component={Login} />
           <Route path="/auth/singup" component={Signup} />
         </Route>

@@ -22,7 +22,7 @@ class ResourceContainer extends Component {
         let { resources, resTypes, usedCount, curRes, selectedSituation, selectStage } = this.props;
         let { selectRes } = this.state;
         let filteredRes = resources.filter(res => {
-            return res.abbr === selectRes
+            return res.type === selectRes
         });
 
         // Set used value.
