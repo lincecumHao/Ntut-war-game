@@ -27,8 +27,8 @@ class ResourceContainer extends Component {
 
         // Set used value.
         filteredRes.map((res, index) => {
-            if (usedCount[res._id]) {
-                filteredRes[index].used = usedCount[res._id];
+            if (usedCount[res.id]) {
+                filteredRes[index].used = usedCount[res.id];
             }
         });
         return (
@@ -56,12 +56,12 @@ class ResourceContainer extends Component {
                                     filteredRes.map(res => {
                                         return (
                                             <Resource
-                                                key={res._id}
-                                                id={res._id}
+                                                key={res.id}
+                                                id={res.id}
                                                 name={res.name}
                                                 avaliable={res.avaliable}
                                                 used={res.used}
-                                                use={curRes[res._id]}
+                                                use={curRes[res.id]}
                                                 selectStage={selectStage}
                                                 selectedSituation={selectedSituation}
                                             />

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Resources } from '../../../../../imports/collections/resources';
+import { Units } from '../../../../../imports/collections/units';
 import { Stages } from '../../../../../imports/collections/stages.js';
 import { Disasters } from '../../../../../imports/collections/disasters.js';
 import DisasterContainer from '../disaster/DisasterContainer.jsx';
@@ -36,8 +37,8 @@ class SituationContainer extends Component {
         }
         return (
             <div className="deliver-container">
-            {disaster}
-            {resource}
+                {disaster}
+                {resource}
             </div>
         );
     }
@@ -52,6 +53,7 @@ export default createContainer((props) => {
     const resource = Meteor.subscribe('resources');
     const stage = Meteor.subscribe('stages');
     const disaster = Meteor.subscribe('disasters');
+    const unit = Meteor.subscribe('units');
     const isResReady = resource.ready();
     const isStageReady = stage.ready();
     const isDisasterReady = disaster.ready();
@@ -59,20 +61,34 @@ export default createContainer((props) => {
     let resources = [], resTypes = [], disasters = [];
     let usedCount = {}, curRes = {}, situation = {};
 
-    if (isResReady && isStageReady && isDisasterReady) {
+    if (isResReady && isStageReady && isDisasterReady && unit.ready()) {
         // When all subscribe is ready.
 
-        // Get all resources.
-        resources = Resources.find({}).fetch();
 
-        // Get all resource type.
-        resources.map(res => {
-            // Find all resource type.
-            if (resTypes.indexOf(res.type) == -1) {
-                resTypes.push(res.type);
-            }
+        // Get all Unis
+        let units = Units.find({ 'resources.1': { $exists: true } }).fetch();
+        units.forEach(unit => {
+            unit.resources.forEach(res => {
+                if (resTypes.indexOf(res.type) == -1) {
+                    resTypes.push(res.type);
+                }
+                // append all resources.
+                var elm = resources.find(val => {
+                    if (val.id === res.id) {
+                        return true
+                    }
+                    return false
+                });
+
+                if (elm) {
+                    elm.avaliable = res.avaliable + elm.avaliable;
+                } else {
+                    resources.push(res);
+                }
+                
+            });
         });
-
+        
         // Count all res used count.
         let stages = Stages.find({}).fetch();
         // Get all used count.
@@ -86,7 +102,7 @@ export default createContainer((props) => {
                             } else {
                                 usedCount[res_id] = usedCount[res_id] + situation.resources[res_id];
                             }
-                        })
+                        });
                     }
                 });
             }

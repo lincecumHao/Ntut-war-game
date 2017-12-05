@@ -63,8 +63,8 @@ Meteor.startup(function () {
                 parent: '信義中隊',
                 manpower: 9,
                 resources: [
-                    { type: '人力', id: '1001', name: '搜救人員' },
-                    { type: '人力', id: '1002', name: '消防人員' },
+                    { type: '人力', id: '1001', name: '搜救人員', avaliable: getRandomInt(1, 100) },
+                    { type: '人力', id: '1002', name: '消防人員', avaliable: getRandomInt(1, 100) },
                     { type: '物品', id: '2002', name: '屍袋', avaliable: getRandomInt(1, 100) },
                     { type: '物品', id: '2003', name: '冰櫃', avaliable: getRandomInt(1, 100) },
                     { type: '裝備', id: '3004', name: '救命器', avaliable: getRandomInt(1, 100) },
