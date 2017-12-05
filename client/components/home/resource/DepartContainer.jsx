@@ -16,11 +16,19 @@ class DepartContainer extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        if(this.props.units.length != nextProps.units){
+            this.setState({
+                index: 0
+            })
+        }
+    }
+
     nextUnit(flag) {
         const { index } = this.state;
         if ((index + flag) < 0) {
             this.setState({
-                index: this.props.units.length
+                index: this.props.units.length - 1
             });
         } else if ((index + flag) >= this.props.units.length) {
             this.setState({
