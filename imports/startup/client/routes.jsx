@@ -7,6 +7,7 @@ import Auth from '../../../client/components/auth/Auth.jsx';
 import Login from '../../../client/components/auth/Login.jsx';
 import Signup from '../../ui/components/auth/Signup.jsx';
 import Backend from '../../../client/components/backend/index.jsx';
+import Dashboard from '../../../client/components/dashboard/index.jsx';
 import Stage from '../../../client/components/backend/stage/index.jsx';
 import Resource from '../../../client/components/backend/resource/index.jsx';
 
@@ -34,7 +35,7 @@ Meteor.startup(() => {
       <Route path="/" component={App}>
         <IndexRoute component={Home} onEnter={authenticate} />
         <Route path="/auth" component={Auth} >
-          <IndexRoute component={Login}/>
+          <IndexRoute component={Login} />
           <Route path="/auth/login" component={Login} />
           <Route path="/auth/singup" component={Signup} />
         </Route>
@@ -42,6 +43,8 @@ Meteor.startup(() => {
           <IndexRoute component={Resource} />
           <Route path="/backend/resource" component={Resource} />
           <Route path="/backend/stage" component={Stage} />
+        </Route>
+        <Route path="/dashboard" component={Dashboard} onEnter={checkIsAdmin}>
         </Route>
       </Route>
       <Redirect from="*" to="/" />

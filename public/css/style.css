@@ -415,3 +415,124 @@ div.arrow-left {
     max-height: 256px;
     background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDI1NiAyNTYiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDI1NiAyNTY7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4Ij4KPGc+Cgk8Zz4KCQk8cG9seWdvbiBwb2ludHM9IjIwNy4wOTMsMzAuMTg3IDE3Ni45MDcsMCA0OC45MDcsMTI4IDE3Ni45MDcsMjU2IDIwNy4wOTMsMjI1LjgxMyAxMDkuMjgsMTI4ICAgIiBmaWxsPSIjMDAwMDAwIi8+Cgk8L2c+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==)
 }
+
+.dashborad {
+    background-color: #011522;
+    width: 100vw;
+    height: 100vh;
+    /* font-size: 2em; */
+    color: white;
+    font-weight: bolder;
+}
+
+.dashborad > div {
+    margin: 0.5rem;
+}
+
+.dashborad .green {
+    background-color: #8cbfea;
+    width: calc(100vw * 0.1);
+    text-align: center;
+    font-size: 2vw;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.dashborad .text-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.dashborad .infobox {
+    border: 0.3rem solid #8cbfea;
+}
+
+.dashborad .height-30 {
+    height: -moz-calc(100vh * 0.3);
+    height: -webkit-calc(100vh * 0.3);
+    height: calc(100vh * 0.3);
+}
+
+.dashborad .height-15 {
+    height: -moz-calc(100vh * 0.15);
+    height: -webkit-calc(100vh * 0.15);
+    height: calc(100vh * 0.15);
+}
+
+.dashborad .height-55 {
+    height: -moz-calc(100vh * 0.55 - 2rem);
+    height: -webkit-calc(100vh * 0.55 - 2rem);
+    height: calc(100vh * 0.55 - 2rem);
+}
+
+.dashborad .height-15 div,
+.dashborad .height-30 div.map,
+.dashborad .height-55 > div {
+    height: 100%;
+}
+
+.no-padding-left {
+    padding-left: 0px;
+}
+
+.no-padding-right {
+    padding-right: 0px;
+}
+
+.padding-bottom {
+    padding-bottom: 0.5rem;
+}
+
+.padding-bottom > div.infobox {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+div.height-15.infobox {
+    display: flex;
+}
+
+.height-30p {
+    height: 33.333%;
+}
+
+.height-30p div {
+    height: 100%;
+}
+
+.height-30p > div.infobox{
+    display: flex;
+}
+
+.height-30p > div.no-margin {
+    margin: 0;
+}
+
+.height-100p {
+    height: 100%;
+}
+
+.dashborad .title {
+    background-color: #8cbfea;
+    font-size: 2rem;
+    margin: 0;
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.chartable .title {
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.chatroom {
+    display: flex;
+    flex-direction: column;
+}
+
+.chatroom .message{
+    height: 100%;
+    background: white;
+}
