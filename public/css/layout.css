@@ -394,10 +394,11 @@ body {
     width: 104px;
     /*height: 109px;*/
     /*left: 2px;*/
-    float: left;
+    /* float: left; */
     text-align: center;
     /* margin-top: 2px; */
     margin-right: 5px;
+    display: inline-block;
 }
 
 .resource_item img {
@@ -423,7 +424,7 @@ body {
     /*position: absolute;
     top: 63px;
     left: 0px;*/
-    margin-top: -5px;
+    margin-top: -12px;
 }
 
 .resource_item div button {
@@ -441,6 +442,9 @@ body {
     float: right;
     margin-right: 15px;
     height: 100px;
+    position: fixed;
+    right: 0;
+    bottom: 35px;
 }
 
 .button_box button {

@@ -24,21 +24,23 @@ class DepartContainer extends Component {
         }
     }
 
+    componentDidUpdate() {
+        this.props.onDepartChange(this.props.units[this.state.index]);
+    }
+
     nextUnit(flag) {
         const { index } = this.state;
+        var next = 0;
         if ((index + flag) < 0) {
-            this.setState({
-                index: this.props.units.length - 1
-            });
+            next = this.props.units.length - 1;
         } else if ((index + flag) >= this.props.units.length) {
-            this.setState({
-                index: 0
-            });
+            next = 0;
         } else {
-            this.setState({
-                index: index + flag
-            });
+            next = index + flag;
         }
+        this.setState({
+            index: next
+        });
     }
 
     goPrev() {
@@ -70,7 +72,8 @@ class DepartContainer extends Component {
 }
 
 DepartContainer.propTypes = {
-    units: PropTypes.array.isRequired
+    units: PropTypes.array.isRequired,
+    onDepartChange: PropTypes.func.isRequired
 };
 
 const getAllParentUnit = function (parentName, parents) {
