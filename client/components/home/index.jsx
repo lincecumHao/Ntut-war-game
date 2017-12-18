@@ -6,15 +6,39 @@ import Status from './header/Status.jsx';
 import ResourceContainer from './resource/ResourceContainer.jsx';
 import MainMap from './map/MainMap.jsx';
 import System from './system/System.jsx';
+import IntroModel from './IntroModel.jsx';
 
 class Home extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            systemDisplay: false
+            systemDisplay: false,
+            isIntroAsk: true,
+            playIntro: false
         }
         this.displaySystem = this.displaySystem.bind(this);
+        this.goIntro = this.goIntro.bind(this);
+        this.closeIntro = this.closeIntro.bind(this);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if(prevState.playIntro == false && this.state.playIntro){
+            introJs().start();
+        }
+    }
+    
+    goIntro() {
+        this.setState({
+            isIntroAsk: false,
+            playIntro: true
+        });
+    }
+
+    closeIntro() {
+        this.setState({
+            isIntroAsk: false
+        });
     }
 
     displaySystem() {
@@ -24,8 +48,10 @@ class Home extends Component {
     }
 
     render() {
+        const { isIntroAsk } = this.state;
         return (
             <div className="wrapper">
+                <IntroModel isOpen={isIntroAsk} onNo={this.closeIntro} onOk={this.goIntro} />
                 <div className="left">
                     <div className="header">
                         <UserContainer

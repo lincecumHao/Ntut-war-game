@@ -29,7 +29,7 @@ class UserContainer extends Component {
 
     render() {
         return (
-            <div className="chatroom_user">
+            <div className="chatroom_user"  data-step="2" data-position="right" data-intro='點擊想要傳達訊息的單位，送出訊息時各單位即可知道此訊息對象是誰'>
                 <h3>使用者</h3>
                 <div>
                     {this.props.loading ? '' : this.renderUsers()}

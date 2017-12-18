@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const User = ({ avatar, username, position, onClick }) => (
-    <div className="user">
+    <div className="user" data-step="1" data-position="right" data-intro='點擊頭像，更多使用者設定與資訊選項'>
         <div className="user_img ">
             <img src={avatar} width="73px" height="73px" onClick={onClick}/>
         </div>

@@ -36,7 +36,7 @@ class RequireEQ extends Component {
                     </ul>
                 </div>
                 <span className="triangle_icon" style={eqBoxStyle}></span>
-                <span onClick={this.switchOpenEq} className="glyphicon glyphicon-exclamation-sign"></span>
+                <span onClick={this.switchOpenEq} className="glyphicon glyphicon-exclamation-sign" data-step="6" data-position="top" data-intro='提醒使用者每項災害需要裝備資源的種類，點一下提醒即跳出'></span>
             </div>
         );
     }

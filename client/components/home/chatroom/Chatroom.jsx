@@ -29,7 +29,7 @@ class Chatroom extends Component {
                     onClickUser={this.onClickUser}
                     sendTo={this.state.sendTo}
                     />
-                <div className="chatroom">
+                <div className="chatroom"  data-step="3" data-position="right" data-intro='除了傳送訊息，點選對話可以編輯或刪除訊息'>
                     <h3>聊天室</h3>
                     <MessageContainer />
                     <SendMsg

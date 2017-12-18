@@ -13,6 +13,7 @@ class System extends Component {
         this.about = this.about.bind(this);
         this.editProfile = this.editProfile.bind(this);
         this.switchState = this.switchState.bind(this);
+        this.playIntro = this.playIntro.bind(this);
         this.state = {
             showAbout: false,
             showEditProfile: false
@@ -31,8 +32,9 @@ class System extends Component {
         this.switchState('showAbout');
     }
 
-    userManual() {
-
+    playIntro(e) {
+        e.preventDefault();
+        introJs().start();
     }
 
     editProfile(e) {
@@ -55,7 +57,7 @@ class System extends Component {
                     <div className="user-bubble-arrow"></div>
                     <ul>
                         <li><a href="" onClick={this.editProfile}>個人資料設定</a></li>
-                        <li><a href="">使用說明</a></li>
+                        <li><a onClick={this.playIntro}>使用說明</a></li>
                         <li><a href="" onClick={this.about}>關於</a></li>
                         <li><a href="" onClick={this.logout}>登出</a></li>
                     </ul>
