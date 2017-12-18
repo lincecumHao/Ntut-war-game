@@ -96,6 +96,10 @@
 .suggest-poi {
     max-height: 200px;
     overflow-y: auto;
+    position: absolute;
+    z-index: 2;
+    width: 350px;
+    height: 200px;
 }
 
 .suggest-poi .list-group .list-group-item {
@@ -532,7 +536,8 @@ div.height-15.infobox {
     flex-direction: column;
 }
 
-.chatroom .message{
+.dashborad .chatroom .message{
     height: 100%;
     background: white;
+    margin: 5px;
 }

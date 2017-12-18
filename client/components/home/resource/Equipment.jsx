@@ -1,31 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Equipment = ({id, img, current, count, updateCurrent, name}) => (
+const Equipment = ({ id, img, used, avaliable, leftRes, onUnitAdj, name }) => (
     <div className="resource_item">
-        <img src={img+'.png'} width="90px" height="70px" alt={name} />
-        <p>x {count - current}</p>
+        <img src={img + '.png'} width="90px" height="70px" alt={name} />
+        <p>x {used}</p>
         <div>
-            <button disabled={(current - 1 < 0 ? true : false)} onClick={() => { updateCurrent(id, -1) } }><span className="glyphicon glyphicon-chevron-left"></span></button>
-            <input type="text" value={current} readOnly />
-            <button disabled={(current + 1 > count ? true : false)} onClick={() => { updateCurrent(id, 1) } }><span className="glyphicon glyphicon-chevron-right"></span></button>
+            <button disabled={(leftRes == avaliable)} onClick={() => { onUnitAdj(id, (used - 1 < 0 ? 0 : used - 1)) }}><span className="glyphicon glyphicon-chevron-left"></span></button>
+            <input type="text" value={avaliable - used} readOnly />
+            <button disabled={(leftRes == 0)} onClick={() => { onUnitAdj(id, (used + 1 < avaliable ? used + 1 : avaliable)) }}><span className="glyphicon glyphicon-chevron-right"></span></button>
         </div>
     </div>
 );
 
 Equipment.propTypes = {
     id: PropTypes.string.isRequired,
-    updateCurrent: PropTypes.func.isRequired,
-    name: PropTypes.string, 
+    onUnitAdj: PropTypes.func.isRequired,
+    name: PropTypes.string,
     img: PropTypes.string,
-    count: PropTypes.number,
-    current: PropTypes.number
+    used: PropTypes.number,
+    avaliable: PropTypes.number,
+    leftRes: PropTypes.number
 };
 
 Equipment.defaultProps = {
     name: 'test',
     img: './images/car_icon01.png',
-    count: 211
+    used: 0,
+    avaliable: 0,
+    leftRes: 0
 };
 
 export default Equipment;

@@ -1,5 +1,23 @@
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
+import { check, Match } from 'meteor/check';
+
+Meteor.methods({
+  'unit.update': function (obj) {
+    check(obj, {
+      unitName: String, resId: String, flag: Match.Integer
+    });
+    const { unitName, resId, flag } = obj;
+    Units.update({
+      name: unitName,
+      'resources.id': resId
+    }, {
+        $set: {
+          'resources.$.used': flag
+        }
+      });
+  }
+});
 
 export const getUnitName = function (unitId) {
   let unit = Units.findOne({ _id: unitId });
@@ -191,7 +209,7 @@ Meteor.startup(function () {
           { type: '人員', id: '1004', name: '志工', avaliable: 40 },
           { type: '物資', id: '2001', name: '大型太空包', avaliable: 100 },
           { type: '物資', id: '2004', name: '沙包', avaliable: 90 },
-          { type: '裝備機具',   id: '3005', name: '無線電對講機', avaliable: 90 },
+          { type: '裝備機具', id: '3005', name: '無線電對講機', avaliable: 90 },
           { type: '車輛', id: '4012', name: '警車', avaliable: 320 },
           { type: '車輛', id: '4018', name: '機車', avaliable: 100 }
         ]

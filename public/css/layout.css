@@ -224,7 +224,7 @@ body {
 
 .message {
     overflow-y: scroll;
-    margin: 5px 0px 5px 5px;
+    margin: 5px;
     height: calc(100vh - 475px);
 }
 
@@ -242,7 +242,7 @@ body {
 
 .chatroom input[type="text"] {
     width: 286px;
-    position: absolute;
+    /* position: absolute; */
     bottom: 2px;
     height: 26px;
     line-height: 26px;
@@ -359,6 +359,7 @@ body {
     height: 35px;
     background: #888;
     text-align: center;
+    cursor: pointer;
 }
 
 .resource_category li a {

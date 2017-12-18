@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import Datetime from 'react-datetime';
 
 // 地標搜尋半徑(m)
 const SEARCH_RADIUS = '500';
@@ -19,13 +20,15 @@ class DisasterContainer extends Component {
         this.poiMarker = null;
         this.onTypeChange = this.onTypeChange.bind(this);
         this.onTxtChange = this.onTxtChange.bind(this);
-        this.searchPlacemark = this.searchPlacemark.bind(this);
+        this.onDatetimeChange = this.onDatetimeChange.bind(this);
         this.onTxtEnter = this.onTxtEnter.bind(this);
+        this.onCommonChange = this.onCommonChange.bind(this);
         this.onSelectPoi = this.onSelectPoi.bind(this);
+        this.searchPlacemark = this.searchPlacemark.bind(this);
         this.displayPoi = this.displayPoi.bind(this);
         this.createPoiMarker = this.createPoiMarker.bind(this);
-        this.onCommonChange = this.onCommonChange.bind(this);
         this.updSituation = this.updSituation.bind(this);
+        
         this.state = {
             searchTxt: '',
             placemarks: [],
@@ -100,9 +103,14 @@ class DisasterContainer extends Component {
 
     onSelectPoi(e) {
         this.setState({
-            selectPoi: e.target.getAttribute('data')
+            selectPoi: e.target.getAttribute('data'),
+            placemarks: []
         });
         this.displayPoi(e.target.getAttribute('data'));
+    }
+
+    onDatetimeChange(momentObj){
+        console.log(momentObj);
     }
 
     createPoiMarker(poi) {
@@ -148,7 +156,7 @@ class DisasterContainer extends Component {
 
     render() {
         let { disasters, situation } = this.props;
-        let { placemarks } = this.state;
+        let { placemarks, common } = this.state;
         return (
             <div className="disaster-info">
                 <table>
@@ -156,11 +164,7 @@ class DisasterContainer extends Component {
                         <tr>
                             <td>災害時間</td>
                             <td>
-                                <label>
-                                    <select name="select" id="select">
-                                        <option>1234564684789489</option>
-                                    </select>
-                                </label>
+                                <Datetime onChange={this.onDatetimeChange}/>
                             </td>
                         </tr>
                         <tr>
@@ -217,12 +221,7 @@ class DisasterContainer extends Component {
                             <td>災害狀況
                                 <br />發生敘述</td>
                             <td>
-                                <textarea value={this.state.common} onChange={this.onCommonChange}></textarea>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colSpan="2" style={{ 'paddingRight': '25px' }}>
-                                <button className="btn btn-sm btn-black">演練開始&nbsp;<span className="glyphicon glyphicon-share-alt"></span></button>
+                                <textarea value={common} onChange={this.onCommonChange}></textarea>
                             </td>
                         </tr>
                     </tbody>

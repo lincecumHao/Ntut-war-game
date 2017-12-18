@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
-import { Units } from '../../../../imports/collections/units.js';
-import { Characters } from '../../../../imports/collections/characters.js';
 import Depart from './Depart';
 
 class DepartContainer extends Component {
@@ -10,57 +7,30 @@ class DepartContainer extends Component {
         super(props, context);
         this.goNext = this.goNext.bind(this);
         this.goPrev = this.goPrev.bind(this);
-        this.nextUnit = this.nextUnit.bind(this);
-        this.state = {
-            index: 0
-        }
     }
 
-    componentWillReceiveProps(nextProps) {
-        if(this.props.units.length != nextProps.units){
-            this.setState({
-                index: 0
-            })
-        }
+    shouldComponentUpdate(nextProps) {
+        return nextProps.depart._id !== this.props.depart._id
     }
-
-    componentDidUpdate() {
-        this.props.onDepartChange(this.props.units[this.state.index]);
-    }
-
-    nextUnit(flag) {
-        const { index } = this.state;
-        var next = 0;
-        if ((index + flag) < 0) {
-            next = this.props.units.length - 1;
-        } else if ((index + flag) >= this.props.units.length) {
-            next = 0;
-        } else {
-            next = index + flag;
-        }
-        this.setState({
-            index: next
-        });
-    }
-
+    
     goPrev() {
-        this.nextUnit(-1);
+        this.props.onDepartChange(-1);
     }
 
     goNext() {
-        this.nextUnit(1);
+        this.props.onDepartChange(1);
     }
 
     render() {
-        const unit = this.props.units[this.state.index];
-        if (unit) {
+        const { depart } = this.props;
+        if (depart._id) {
             return (
                 <Depart
-                    depart={unit.depart}
-                    brigade={unit.brigade}
-                    group={unit.group}
-                    crew={unit.crew}
-                    goNext={this.goNext}
+                    depart={depart.depart}
+                    brigade={depart.brigade}
+                    group={depart.group}
+                    crew={depart.crew}
+                    goNext={(this.goNext)}
                     goPrev={this.goPrev}
                 />
             );
@@ -72,48 +42,12 @@ class DepartContainer extends Component {
 }
 
 DepartContainer.propTypes = {
-    units: PropTypes.array.isRequired,
+    depart: PropTypes.object,
     onDepartChange: PropTypes.func.isRequired
 };
 
-const getAllParentUnit = function (parentName, parents) {
-    var unit = Units.findOne({ name: parentName });
-    if (unit) {
-        parents.push(unit.name);
-    }
-    if (unit.parent) {
-        return getAllParentUnit(unit.parent, parents)
-    }
-    return parents;
-};
+DepartContainer.defaultProps = {
+    depart: {}
+}
 
-export default createContainer(() => {
-    const units = Meteor.subscribe('units');
-    const characters = Meteor.subscribe('characters');
-    if (units.ready() && characters.ready()) {
-        let character = Characters.findOne({ userId: Meteor.userId() });
-        const actIds = (character ? character.act : []);
-        let userActUnits = Units.find({ _id: { $in: actIds } }).fetch();
-        const userUnit = Units.findOne({ _id: Meteor.user().profile.position });
-        userActUnits.forEach(unit => {
-            unit.depart = userUnit.name;
-            unit.crew = unit.name;
-            if (unit.parent) {
-                let parent = getAllParentUnit(unit.parent, []);
-                parent.pop();
-                if (parent.length === 2) {
-                    unit.brigade = parent[1];
-                    unit.group = parent[0];
-                } else if (parent.length === 1) {
-                    unit.brigade = parent[0];
-                }
-            }
-        });
-        return {
-            units: userActUnits
-        }
-    }
-    return {
-        units: []
-    }
-}, DepartContainer);
+export default DepartContainer;

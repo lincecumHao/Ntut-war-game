@@ -1,116 +1,80 @@
 import React, { Component } from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
 import DepartContainer from './DepartContainer.jsx';
 import RequireEQ from './RequireEQ.jsx';
-import Equipment from './Equipment.jsx';
+import EquipmentContainer from './EquipmentContainer.jsx';
 import CategoryContainer from './CategoryContainer.jsx';
-import update from 'react-addons-update';
+import { Units } from '../../../../imports/collections/units.js';
+import { Characters } from '../../../../imports/collections/characters.js';
 
 class ResourceContainer extends Component {
     constructor(props) {
         super(props);
-        this.updateCurrent = this.updateCurrent.bind(this);
         this.onDepartChange = this.onDepartChange.bind(this);
         this.onCategoryChange = this.onCategoryChange.bind(this);
-        this.showArrow = this.showArrow.bind(this);
-        this.onShowRangChange = this.onShowRangChange.bind(this);
-        this.getLeftW = this.getLeftW.bind(this);
+        this.onUnitAdj = this.onUnitAdj.bind(this);
         this.state = {
-            depart: { resources: [] },
+            selectDeparts: 0,
             category: '人員'
         }
     }
 
-    updateCurrent(id, value) {
-        let updatedEqs = this.state.eqs.map(eq => {
-            if (eq.id === id) {
-                return update(eq, { current: { $set: eq.current + value } });
-            } else {
-                return eq
-            }
-        });
+    onDepartChange(flag) {
+        const { selectDeparts } = this.state;
+        var next = 0;
+        if ((selectDeparts + flag) < 0) {
+            next = this.props.units.length - 1;
+        } else if ((selectDeparts + flag) >= this.props.units.length) {
+            next = 0;
+        } else {
+            next = selectDeparts + flag;
+        }
         this.setState({
-            eqs: updatedEqs
+            selectDeparts: next
         });
-    }
-
-    onDepartChange(depart) {
-        this.setState({ depart, showArrow: this.showArrow(depart.resources, this.state.category), showRange: 0 });
     }
 
     onCategoryChange(category) {
-        this.setState({ category, showArrow: this.showArrow(this.state.depart.resources, category), showRange: 0 });
+        this.setState({ category });
     }
 
-    onShowRangChange(index) {
-        const { showRange } = this.state;
-        if (index + showRange < 0) index = 0;
-        this.setState({ showRange: showRange + index });
-    }
-
-    showArrow(res, cat) {
-        const arrowW = 15;
-        const eachResourceW = 105;
-        const leftW = this.getLeftW();
-        const match = res.filter(res => (res.type === cat));
-        return leftW - (eachResourceW * match.length) < (arrowW * 2 + 5);
-    }
-
-    getLeftW() {
-        const btnBoxW = 74;
-        const arrowW = 15;
-        return this.myInput.offsetWidth - btnBoxW - (arrowW * 2);
+    onUnitAdj(resId, flag) {
+        const { units } = this.props;
+        const { selectDeparts } = this.state;
+        const unitName = units[selectDeparts].name;
+        Meteor.call('unit.update', { unitName, resId, flag }, (err) => {
+            if (err) {
+                alert(err);
+            }
+        });
     }
 
     render() {
-        const { depart, category, showArrow, showRange } = this.state;
-        let resources = [];
-        if (depart) resources = depart.resources;
+        const { category, selectDeparts } = this.state;
+        const { units } = this.props;
+        const unit = units[selectDeparts];
+        let resources = unit ? unit.resources : [];
         const selectedRes = resources.filter(res => (res.type === category));
-        let cursorStyle = { cursor: 'pointer' };
-        let maxShowItemCount = 0;
-        let maxIndex = 0;
-        let minIndex = 0;
-        if (showArrow) {
-            maxShowItemCount = Math.floor(this.getLeftW() / 105);
-            maxIndex = maxShowItemCount + showRange;
-            minIndex = showRange;
-            if((maxIndex - 1) > selectedRes.length) maxIndex = selectedRes.length;
-            if(minIndex > (selectedRes.length - 2)) minIndex = selectedRes.length - 2;
-        }
         return (
             <div className="resource">
-                <DepartContainer onDepartChange={this.onDepartChange} />
+                <DepartContainer
+                    depart={unit}
+                    onDepartChange={this.onDepartChange}
+                />
                 <div className="resource_R">
                     <CategoryContainer
                         selected={category}
                         onChange={this.onCategoryChange}
                     />
                     <RequireEQ />
-                    <div className="resource_items" ref={input => { this.myInput = input }}>
-                        {showArrow ? <div className="arrow-left" style={cursorStyle} onClick={() => { this.onShowRangChange(-1) }}></div> : ''}
-                        <div style={{ height: '125px', display: 'inline-flex', width: 'calc(100% - 110px)' }}>
-                            {
-                                selectedRes.map((res, index) => {
-                                    if (showArrow && (index < minIndex || index >= maxIndex)) return;
-                                    return (
-                                        <Equipment
-                                            key={res.id}
-                                            id={res.id}
-                                            name={res.name}
-                                            count={res.avaliable}
-                                            current={res.avaliable}
-                                            updateCurrent={() => { }}
-                                        />
-                                    )
-                                })
-                            }
-                        </div>
-                        {showArrow ? <div className="arrow-right" style={cursorStyle} onClick={() => { this.onShowRangChange(1) }}></div> : ''}
-                        <div className="button_box ">
-                            <button className="btn btn_XL btn-black ">確定</button>
-                            <br />
-                            <button className="btn btn_XL btn-black">取消</button>
-                        </div>
+                    <EquipmentContainer
+                        equipments={selectedRes}
+                        onUnitAdj={this.onUnitAdj}
+                    />
+                    <div className="button_box ">
+                        <button className="btn btn_XL btn-black ">確定</button>
+                        <br />
+                        <button className="btn btn_XL btn-black">取消</button>
                     </div>
                 </div>
             </div>
@@ -118,4 +82,45 @@ class ResourceContainer extends Component {
     }
 }
 
-export default ResourceContainer;
+const getAllParentUnit = function (parentName, parents) {
+    var unit = Units.findOne({ name: parentName });
+    if (unit) {
+        parents.push(unit.name);
+    }
+    if (unit.parent) {
+        return getAllParentUnit(unit.parent, parents)
+    }
+    return parents;
+};
+
+export default createContainer(() => {
+    const units = Meteor.subscribe('units');
+    const characters = Meteor.subscribe('characters');
+    if (units.ready() && characters.ready()) {
+        let character = Characters.findOne({ userId: Meteor.userId() });
+        if (!character || character.act.length === 0) return { units: [] };
+        const actIds = character.act;
+        let userActUnits = Units.find({ _id: { $in: actIds } }).fetch();
+        const userUnit = Units.findOne({ _id: Meteor.user().profile.position });
+        userActUnits.forEach(unit => {
+            unit.depart = userUnit.name;
+            unit.crew = unit.name;
+            if (unit.parent) {
+                let parent = getAllParentUnit(unit.parent, []);
+                parent.pop();
+                if (parent.length === 2) {
+                    unit.brigade = parent[1];
+                    unit.group = parent[0];
+                } else if (parent.length === 1) {
+                    unit.brigade = parent[0];
+                }
+            }
+        });
+        return {
+            units: userActUnits
+        }
+    }
+    return {
+        units: []
+    }
+}, ResourceContainer);
