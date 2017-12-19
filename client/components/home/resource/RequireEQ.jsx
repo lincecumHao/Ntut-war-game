@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
+import { Stages } from '../../../../imports/collections/stages.js';
+import { Units } from '../../../../imports/collections/units.js';
 
 class RequireEQ extends Component {
     constructor(props) {
@@ -14,25 +17,23 @@ class RequireEQ extends Component {
             isOpen: !this.state.isOpen
         });
     }
-    
+
     render() {
         let eqBoxStyle = {
             visibility: (this.state.isOpen ? 'visible' : 'hidden')
         }
+        let { reqRes } = this.props;
+        reqRes = (reqRes ? reqRes : []);
         return (
             <div className="Requiredbox pull-right">
                 <div className="Required" style={eqBoxStyle}>
                     <h3>所需裝備支援為:</h3>
                     <ul>
-                        <li>消防車</li>
-                        <li>救護車</li>
-                        <li>昇空車</li>
-                        <li>無線對講機</li>
-                        <li>電鑽</li>
-                        <li>锯子</li>
-                        <li>可動員人數</li>
-                        <li>可動員人數</li>
-                        <li>可動員人數</li>
+                        {
+                            reqRes.map(resName => {
+                                return (<li key={resName}>{resName}</li>);
+                            })
+                        }
                     </ul>
                 </div>
                 <span className="triangle_icon" style={eqBoxStyle}></span>
@@ -42,4 +43,34 @@ class RequireEQ extends Component {
     }
 }
 
-export default RequireEQ;
+export default createContainer(() => {
+    let stages = Meteor.subscribe('stages');
+    let units = Meteor.subscribe('units');
+    if (stages.ready() && units.ready()) {
+        const unPassedStages = Stages.findOne({ 'situations.pass': false }, { sort: { index: 1, 'situations.index': 1 }, limit: 1 });
+        if (unPassedStages) {
+            const { situations } = unPassedStages;
+            const curSituation = situations.filter(obj => (obj.pass == false))[0];
+            if (curSituation.resources) {
+                let resName = [];
+                Object.keys(curSituation.resources).forEach(resId => {
+                    const u = Units.findOne({ 'resources.id': resId }, { limit: 1, fields: { 'resources': 1 } });
+                    u.resources.some(r => {
+                        if (r.id == resId) {
+                            resName.push(r.name);
+                            return true;
+                        }
+                        return false;
+                    });
+
+                });
+                return {
+                    reqRes: resName
+                }
+            }
+            return {}
+        }
+        return {}
+    }
+    return {}
+}, RequireEQ);
