@@ -37,7 +37,7 @@ Meteor.methods({
         let stage = Stages.findOne({ _id: stageId });
         if (stage) {
             let nextIndex = stage.situations.length;
-            Stages.update({ _id: stageId }, { $push: { situations: { index: nextIndex } } });
+            Stages.update({ _id: stageId }, { $push: { situations: { index: nextIndex, pass: false } } });
         }
     },
     'situation.delete': function (stageId) {

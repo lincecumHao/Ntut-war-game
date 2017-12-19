@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
+import { createContainer } from 'meteor/react-meteor-data';
+import { Stages } from '../../../imports/collections/stages.js';
 import MessageContainer from '../home/chatroom/MessageContainer';
 
 class Dashboard extends Component {
@@ -24,9 +26,6 @@ class Dashboard extends Component {
     }
 
     render() {
-        var border = {
-            background: 'black'
-        }
         return (
             <Grid className="dashborad">
                 <Row className="height-30">
@@ -37,7 +36,7 @@ class Dashboard extends Component {
                                     演練階段
                                 </Col>
                                 <Col lg={10} md={10} xs={10} className="text-center">
-                                    第一階段(災害發生初期階段)
+                                    第{this.props.stage + 1}階段(災害發生初期階段)
                                 </Col>
                             </Row>
                         </Row>
@@ -47,7 +46,7 @@ class Dashboard extends Component {
                                     災害位置
                                 </Col>
                                 <Col lg={10} md={10} xs={10} className="text-center">
-                                    建安國小 台北市大安區基隆路四段43號
+                                    {this.props.placemark}
                                 </Col>
                             </Row>
                         </Row>
@@ -73,7 +72,7 @@ class Dashboard extends Component {
                         <span>災害狀況</span>
                     </Col>
                     <Col lg={11} md={11} xs={11} className="text-center">
-                        <span>SOME DESELFJLEJLIELJFS</span>
+                        <span>{this.props.situation}</span>
                     </Col>
                 </Row>
                 <Row className="height-55">
@@ -95,7 +94,23 @@ class Dashboard extends Component {
     }
 }
 
-export default Dashboard;
+export default createContainer(() => {
+    let stages = Meteor.subscribe('stages');
+    if (stages.ready()) {
+        const unPassedStages = Stages.findOne({ 'situations.pass': false }, {sort: { index: 1, 'situations.index': 1 }, limit: 1});
+        if(unPassedStages){
+            const {index, situations} = unPassedStages;
+            const curSituation = situations.filter(obj => (obj.pass == false))[0];
+            return {
+                stage: index,
+                situation: curSituation.common,
+                placemark: curSituation.placemark ? curSituation.placemark.name : ''
+            }
+        }
+        return {}
+    }
+    return {}
+}, Dashboard);
 
 // <Row className="height-100p msg-container">
 
