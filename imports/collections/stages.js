@@ -96,6 +96,7 @@ Meteor.startup(function () {
             index: 0,
             situations: [{
                 index: 0,
+                pass: false,
                 time: new Date(),
                 type: 'earth quace',
                 location: [23, 123],
@@ -106,6 +107,7 @@ Meteor.startup(function () {
             index: 1,
             situations: [{
                 index: 0,
+                pass: false,
                 time: new Date(),
                 type: 'earth quace',
                 location: [23, 123],
@@ -113,6 +115,7 @@ Meteor.startup(function () {
             },
             {
                 index: 1,
+                pass: false,
                 time: new Date(),
                 type: 'earth quace',
                 location: [23.2, 123.2],

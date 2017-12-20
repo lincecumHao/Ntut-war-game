@@ -45,6 +45,7 @@ Meteor.startup(function () {
       {
         name: '忠孝分隊',
         parent: '消防局',
+        location: [121.527153, 25.044037],
         resources: [
           { type: '人員', id: '1001', name: '搜救人員', avaliable: 180 },
           { type: '人員', id: '1002', name: '消防人員', avaliable: 220 },
@@ -94,6 +95,7 @@ Meteor.startup(function () {
       }, {
         name: '華山分隊',
         parent: '消防局',
+        location: [121.520656, 25.047474],
         resources: [
           { type: '人員', id: '1001', name: '搜救人員', avaliable: 150 },
           { type: '人員', id: '1002', name: '消防人員', avaliable: 200 },
@@ -143,6 +145,7 @@ Meteor.startup(function () {
       }, {
         name: '城中分隊',
         parent: '消防局',
+        location: [121.513518, 25.047267],
         resources: [
           { type: '人員', id: '1001', name: '搜救人員', avaliable: 120 },
           { type: '人員', id: '1002', name: '消防人員', avaliable: 180 },
@@ -192,6 +195,7 @@ Meteor.startup(function () {
       }, {
         name: '中正第一分局',
         parent: '警察局',
+        location: [121.517350, 25.045262],
         resources: [
           { type: '人員', id: '1001', name: '搜救人員', avaliable: 100 },
           { type: '人員', id: '1004', name: '志工', avaliable: 50 },
@@ -204,6 +208,7 @@ Meteor.startup(function () {
       }, {
         name: '大安分局',
         parent: '警察局',
+        location: [121.533006, 25.037664],
         resources: [
           { type: '人員', id: '1001', name: '搜救人員', avaliable: 120 },
           { type: '人員', id: '1004', name: '志工', avaliable: 40 },
@@ -216,6 +221,7 @@ Meteor.startup(function () {
       }, {
         name: '信義分局',
         parent: '警察局',
+        location: [121.567859, 25.033419],
         resources: [
           { type: '人員', id: '1001', name: '搜救人員', avaliable: 100 },
           { type: '人員', id: '1004', name: '志工', avaliable: 50 },
@@ -228,6 +234,7 @@ Meteor.startup(function () {
       }, {
         name: '公園路燈工程管理處',
         parent: '工務局',
+        location: [121.514383, 25.040802],
         resources: [
           { type: '人員', id: '1006', name: '工程人員', avaliable: 300 },
           { type: '物資', id: '2001', name: '大型太空包', avaliable: 200 },
@@ -252,6 +259,7 @@ Meteor.startup(function () {
       }, {
         name: '新建工程處第一分隊',
         parent: '工務局',
+        location: [121.527431, 25.052667],
         resources: [
           { type: '人員', id: '1006', name: '工程人員', avaliable: 200 },
           { type: '物資', id: '2001', name: '大型太空包', avaliable: 220 },
@@ -276,6 +284,7 @@ Meteor.startup(function () {
       }, {
         name: '中正區清潔隊',
         parent: '環保局',
+        location: [121.518354, 25.032266],
         resources: [
           { type: '人員', id: '1006', name: '工程人員', avaliable: 400 },
           { type: '人員', id: '1004', name: '志工', avaliable: 100 },
@@ -289,6 +298,7 @@ Meteor.startup(function () {
       }, {
         name: '大安區清潔隊',
         parent: '環保局',
+        location: [121.532907, 25.022517],
         resources: [
           { type: '人員', id: '1006', name: '工程人員', avaliable: 200 },
           { type: '人員', id: '1004', name: '志工', avaliable: 100 },
