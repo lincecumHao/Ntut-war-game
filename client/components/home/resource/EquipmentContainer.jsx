@@ -32,10 +32,7 @@ class EquipmentContainer extends Component {
     }
 
     getContainerWidrh() {
-        const btnBoxW = 74;
-        const arrwoWidth = 15;
-        const offsetWidth = (this.itemContainer ? this.itemContainer.offsetWidth : 100);
-        return offsetWidth - btnBoxW - (arrwoWidth * 2);
+        return (this.itemContainer ? this.itemContainer.offsetWidth : 100);
     }
 
     render() {
@@ -53,9 +50,9 @@ class EquipmentContainer extends Component {
             if (minIndex > (equipments.length - 2)) minIndex = equipments.length - 2;
         }
         return (
-            <div ref={input => { this.itemContainer = input }}>
+            <div>
                 {this.isEqsOverContainer() ? <div className="arrow_container" onClick={() => { this.onShowRangChange(-1) }}><div className="arrow-left" style={cursorStyle}></div></div> : ''}
-                <div style={{ height: '125px', display: 'inline-flex', width: 'calc(100% - 15px)' }}>
+                <div style={{ height: '125px', display: 'inline-flex', width: 'calc(100% - 15px)' }}  ref={input => { this.itemContainer = input }}>
                     {
                         equipments.map((res, index) => {
                             if (this.isEqsOverContainer() && (index < minIndex || index >= maxIndex)) return;

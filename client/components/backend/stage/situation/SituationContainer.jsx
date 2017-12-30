@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createContainer } from 'meteor/react-meteor-data';
-import { Resources } from '../../../../../imports/collections/resources';
 import { Units } from '../../../../../imports/collections/units';
 import { Stages } from '../../../../../imports/collections/stages.js';
 import { Disasters } from '../../../../../imports/collections/disasters.js';
 import DisasterContainer from '../disaster/DisasterContainer.jsx';
 import ResourceContainer from '../resource/ResourceContainer.jsx';
-import Transition from 'react-transition-group/Transition';
 // import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
 
 class SituationContainer extends Component {

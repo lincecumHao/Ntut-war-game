@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
+import ReactModal from 'react-modal';
 import DepartContainer from './DepartContainer.jsx';
 import RequireEQ from './RequireEQ.jsx';
 import EquipmentContainer from './EquipmentContainer.jsx';
 import CategoryContainer from './CategoryContainer.jsx';
 import { Units } from '../../../../imports/collections/units.js';
 import { Characters } from '../../../../imports/collections/characters.js';
+import { Stages } from '../../../../imports/collections/stages.js';
+
 
 class ResourceContainer extends Component {
     constructor(props) {
@@ -13,6 +16,10 @@ class ResourceContainer extends Component {
         this.onDepartChange = this.onDepartChange.bind(this);
         this.onCategoryChange = this.onCategoryChange.bind(this);
         this.onUnitAdj = this.onUnitAdj.bind(this);
+        this.sendUnit = this.sendUnit.bind(this);
+        this.onOk = this.onOk.bind(this);
+        this.onCancle = this.onCancle.bind(this);
+        this.showConfim = this.showConfim.bind(this);
         this.state = {
             selectDeparts: 0,
             category: '人員'
@@ -49,8 +56,52 @@ class ResourceContainer extends Component {
         });
     }
 
+    onOk() {
+        this.setState({
+            isConfirm: !this.state.isConfirm
+        });
+        this.sendUnit();
+    }
+
+    onCancle() {
+        this.setState({
+            isConfirm: !this.state.isConfirm
+        });
+    }
+
+    sendUnit() {
+        const { units, stage, situation } = this.props;
+        const sendToSituation = [];
+        units.forEach(unit => {
+            const { _id, resources } = unit;
+            const tmp = {
+                _id,
+                res: {}
+            };
+            const usedResources = resources.filter(res => (res.used > 0));
+            usedResources.forEach(res => {
+                const { id, used } = res;
+                tmp.res[id] = used;
+            });
+            if (Object.keys(tmp.res).length > 0) {
+                sendToSituation.push(tmp);
+            }
+        });
+        Meteor.call('situation.addSendUnits', sendToSituation, situation, stage, (err) => {
+            if (err) {
+                alert(err);
+            }
+        });
+    }
+
+    showConfim() {
+        this.setState({
+            isConfirm: !this.state.isConfirm
+        });
+    }
+
     render() {
-        const { category, selectDeparts } = this.state;
+        const { category, selectDeparts, isConfirm } = this.state;
         const { units } = this.props;
         const unit = units[selectDeparts];
         let resources = unit ? unit.resources : [];
@@ -73,9 +124,24 @@ class ResourceContainer extends Component {
                             onUnitAdj={this.onUnitAdj}
                         />
                         <div className="button_box">
-                            <button className="btn btn_XL btn-black ">確定</button>
+                            <button className="btn btn_XL btn-black" onClick={this.showConfim}>確定</button>
                             <br />
                             <button className="btn btn_XL btn-black">取消</button>
+                            <ReactModal
+                                isOpen={isConfirm}
+                                contentLabel="onRequestClose Example"
+                                className="popup-modal-black"
+                                overlayClassName="popup-overlay"
+                            >
+                                <h1 className="title">提醒</h1>
+                                <div className="content" style={{ textAlign: 'center' }}>
+                                    <h3>確定要送出資源嗎?</h3>
+                                </div>
+                                <div className="btns">
+                                    <button className="confirmBtn" onClick={this.onOk}>確定</button>
+                                    <button className="confirmBtn pull-right" onClick={this.onCancle}>取消</button>
+                                </div>
+                            </ReactModal>
                         </div>
                     </div>
                 </div>
@@ -98,7 +164,8 @@ const getAllParentUnit = function (parentName, parents) {
 export default createContainer(() => {
     const units = Meteor.subscribe('units');
     const characters = Meteor.subscribe('characters');
-    if (units.ready() && characters.ready()) {
+    const stages = Meteor.subscribe('stages');
+    if (units.ready() && characters.ready() && stages.ready()) {
         let character = Characters.findOne({ userId: Meteor.userId() });
         if (!character || character.act.length === 0) return { units: [] };
         const actIds = character.act;
@@ -118,8 +185,54 @@ export default createContainer(() => {
                 }
             }
         });
+
+        // Get current situations.
+        const unPassedStages = Stages.findOne({ 'situations.pass': false }, { sort: { index: 1, 'situations.index': 1 }, limit: 1 });
+        let curSituation;
+        if (unPassedStages) {
+            const { situations } = unPassedStages;
+            curSituation = situations.filter(obj => (obj.pass == false))[0];
+        }
+
+        const allStages = Stages.find({});
+        userActUnits.forEach(unit => {
+            const { _id } = unit;
+            const allSendRes = {};
+
+            // Render all stages.
+            allStages.forEach(({ situations }) => {
+
+                // Render all situations.
+                situations.forEach(({ sended }) => {
+                    if (sended) {
+                        const allSend = sended.filter(send => (send._id === _id));
+
+                        allSend.forEach(({ res }) => {
+                            Object.keys(res).forEach(key => {
+                                if (allSendRes[key]) {
+                                    allSendRes[key] = allSendRes[key] + res[key];
+                                } else {
+                                    allSendRes[key] = res[key];
+                                }
+                            });
+                        });
+                    }
+                })
+            });
+
+            // Update avaliable.
+            Object.keys(allSendRes).forEach(key => {
+                const found = unit.resources.find(({ id }) => {
+                    return id === key;
+                })
+                found.avaliable = found.avaliable - allSendRes[key];
+            });
+        });
+
         return {
-            units: userActUnits
+            units: userActUnits,
+            stage: unPassedStages._id,
+            situation: curSituation.index
         }
     }
     return {

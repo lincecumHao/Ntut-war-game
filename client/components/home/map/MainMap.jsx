@@ -37,7 +37,6 @@ class MainMap extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.props.units.length !== nextProps.units.length) {
-
             // Remove all marker
             this.markers.forEach(marker => {
                 marker.setMap(null);
@@ -66,7 +65,7 @@ class MainMap extends Component {
                 icon: 'images/earthquake_50_44.png'
             });
             this.calTime();
-        } else {
+        } else if(!this.dissasterLocation){
             // Create dissaster location.
             this.dissasterLocation = this.createMarker({
                 lat: nextProps.happenLocation[1],
@@ -159,14 +158,7 @@ class MainMap extends Component {
         return marker;
     }
 
-
     render() {
-
-        /* position: absolute; */
-        /* top: 400px; */
-        /* left: 500px; */
-        /* width: 300px; */
-        /* text-align: center; */
         let mapStyle = {
             marginLeft: '10px',
             marginTop: '10px',

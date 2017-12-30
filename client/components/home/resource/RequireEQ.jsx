@@ -51,19 +51,31 @@ export default createContainer(() => {
         if (unPassedStages) {
             const { situations } = unPassedStages;
             const curSituation = situations.filter(obj => (obj.pass == false))[0];
+
             if (curSituation.resources) {
                 let resName = [];
                 Object.keys(curSituation.resources).forEach(resId => {
+
+                    // Get all current send.
+                    let allsend = 0;
+                    curSituation.sended.forEach(send => {
+                        if (send.res[resId]) {
+                            allsend += send.res[resId];
+                        }
+                    });
+
+                    // Show all needed resource and count.
                     const u = Units.findOne({ 'resources.id': resId }, { limit: 1, fields: { 'resources': 1 } });
                     u.resources.some(r => {
                         if (r.id == resId) {
-                            resName.push(r.name);
+                            resName.push(`${r.name}(${curSituation.resources[resId] - allsend})`);
                             return true;
                         }
                         return false;
                     });
 
                 });
+
                 return {
                     reqRes: resName
                 }

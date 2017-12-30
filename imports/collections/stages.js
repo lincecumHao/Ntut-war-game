@@ -1,5 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
+import { Units } from './units';
 const ADD = 1;
 const MINUS = -1;
 
@@ -100,6 +101,38 @@ Meteor.methods({
             },
             false,
             true);
+    },
+    'situation.addSendUnits': function (sendRes, situationIndex, stageId) {
+        check(sendRes, Array);
+        check(situationIndex, Number);
+        check(stageId, String);
+        let updType = {};
+        sendRes.forEach(send => {
+            updType['situations.$.sended'] = send;
+            Stages.update({
+                _id: stageId,
+                'situations.index': parseInt(situationIndex)
+            }, {
+                    $push: updType
+                },
+                false,
+                true
+            );
+
+            // Reset resources used to zero.
+            const { _id, res } = send;
+            Object.keys(res).forEach(() => {
+                Units.update({
+                    _id,
+                    'resources.used': { $gt: 0 }
+                }, {
+                        $set: { 'resources.$.used': 0 }
+                    },
+                    { multi: true }
+                );
+            })
+
+        });
     }
 });
 
