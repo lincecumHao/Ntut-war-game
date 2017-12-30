@@ -14,7 +14,7 @@ class Home extends Component {
         super(props);
         this.state = {
             systemDisplay: false,
-            isIntroAsk: true,
+            isIntroAsk: false,
             playIntro: false
         }
         this.displaySystem = this.displaySystem.bind(this);

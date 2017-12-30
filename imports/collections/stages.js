@@ -85,6 +85,21 @@ Meteor.methods({
             },
             false,
             true);
+    },
+    'situation.setTime': function (stageId, situationIndex, time) {
+        check(stageId, String);
+        check(situationIndex, String);
+        check(time, Date);
+        let updType = {};
+        updType['situations.$.time'] = time;
+        Stages.update({
+            _id: stageId,
+            'situations.index': parseInt(situationIndex)
+        }, {
+                $set: updType
+            },
+            false,
+            true);
     }
 });
 

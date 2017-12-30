@@ -26,6 +26,12 @@ class Dashboard extends Component {
     }
 
     render() {
+        const {time} = this.props;
+        let dateStr = '';
+        console.log(time);
+        if(time){
+            dateStr = `民國${time.getFullYear() - 1911}年${time.getMonth() + 1}月${time.getDate()}日 ${time.getHours()}時${time.getMinutes()}分`
+        }
         return (
             <Grid className="dashborad">
                 <Row className="height-30">
@@ -56,7 +62,7 @@ class Dashboard extends Component {
                                     災害時間
                                 </Col>
                                 <Col lg={10} md={10} xs={10} className="text-center">
-                                    89年8月30日 下午5時51分
+                                   {dateStr}
                                 </Col>
                             </Row>
                         </Row>
@@ -97,21 +103,18 @@ class Dashboard extends Component {
 export default createContainer(() => {
     let stages = Meteor.subscribe('stages');
     if (stages.ready()) {
-        const unPassedStages = Stages.findOne({ 'situations.pass': false }, {sort: { index: 1, 'situations.index': 1 }, limit: 1});
-        if(unPassedStages){
-            const {index, situations} = unPassedStages;
+        const unPassedStages = Stages.findOne({ 'situations.pass': false }, { sort: { index: 1, 'situations.index': 1 }, limit: 1 });
+        if (unPassedStages) {
+            const { index, situations } = unPassedStages;
             const curSituation = situations.filter(obj => (obj.pass == false))[0];
             return {
                 stage: index,
                 situation: curSituation.common,
-                placemark: curSituation.placemark ? curSituation.placemark.name : ''
+                placemark: curSituation.placemark ? curSituation.placemark.name : '',
+                time: curSituation.time
             }
         }
-        return {}
+        return {};
     }
-    return {}
+    return {};
 }, Dashboard);
-
-// <Row className="height-100p msg-container">
-
-// </Row>

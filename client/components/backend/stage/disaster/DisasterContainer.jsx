@@ -110,7 +110,8 @@ class DisasterContainer extends Component {
     }
 
     onDatetimeChange(momentObj){
-        console.log(momentObj);
+        let { selectStage, selectedSituation } = this.props
+        Meteor.call('situation.setTime', selectStage, selectedSituation, momentObj.toDate())
     }
 
     createPoiMarker(poi) {
@@ -164,7 +165,7 @@ class DisasterContainer extends Component {
                         <tr>
                             <td>災害時間</td>
                             <td>
-                                <Datetime onChange={this.onDatetimeChange}/>
+                                <Datetime onChange={this.onDatetimeChange} value={situation.time}/>
                             </td>
                         </tr>
                         <tr>
