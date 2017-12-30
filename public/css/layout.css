@@ -388,6 +388,40 @@ body {
     padding: 4px;
 }
 
+.resource_items{
+    height: calc(100% - 37px);
+    display: flex;
+}
+
+.resource_items > div{
+    height: 100%;
+}
+
+.resource_items > div:first-child{
+    width: 100%;
+    display: flex;
+}
+
+.resource_items > div.btns-container{
+    background-color: yellow;
+    width: 110px;
+}
+
+.resource_items .arrow_container {
+    margin: 5px;
+    cursor: pointer;
+}    
+
+.resource_items .arrow_container .arrow-left,
+.resource_items .arrow_container .arrow-right {
+    position: relative;
+    top: 50px;
+}
+
+.resource_items .arrow_container:hover {
+    background-color: beige;
+}
+
 .resource_item {
     /*position: absolute;
     top: 40px;*/
@@ -440,12 +474,14 @@ body {
 }
 
 .button_box {
-    float: right;
+    /* float: right;
     margin-right: 15px;
     height: 100px;
     position: fixed;
     right: 0;
-    bottom: 35px;
+    bottom: 35px; */
+    text-align: center;
+    width: 110px;
 }
 
 .button_box button {

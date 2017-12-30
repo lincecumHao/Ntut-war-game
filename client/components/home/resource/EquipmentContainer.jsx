@@ -12,6 +12,10 @@ class EquipmentContainer extends Component {
             showRange: 0
         }
     }
+    
+    componentWillReceiveProps() {
+        this.setState({showRange: 0});
+    }
 
     onShowRangChange(index) {
         const { showRange } = this.state;
@@ -49,9 +53,9 @@ class EquipmentContainer extends Component {
             if (minIndex > (equipments.length - 2)) minIndex = equipments.length - 2;
         }
         return (
-            <div className="resource_items" ref={input => { this.itemContainer = input }}>
-                {this.isEqsOverContainer() ? <div className="arrow-left" style={cursorStyle} onClick={() => { this.onShowRangChange(-1) }}></div> : ''}
-                <div style={{ height: '125px', display: 'inline-flex', width: 'calc(100% - 110px)' }}>
+            <div ref={input => { this.itemContainer = input }}>
+                {this.isEqsOverContainer() ? <div className="arrow_container" onClick={() => { this.onShowRangChange(-1) }}><div className="arrow-left" style={cursorStyle}></div></div> : ''}
+                <div style={{ height: '125px', display: 'inline-flex', width: 'calc(100% - 15px)' }}>
                     {
                         equipments.map((res, index) => {
                             if (this.isEqsOverContainer() && (index < minIndex || index >= maxIndex)) return;
@@ -70,8 +74,8 @@ class EquipmentContainer extends Component {
                         })
                     }
                 </div>
-                {this.isEqsOverContainer() ? <div className="arrow-right" style={cursorStyle} onClick={() => { this.onShowRangChange(1) }}></div> : ''}
-                
+                {this.isEqsOverContainer() ? <div className="arrow_container" onClick={() => { this.onShowRangChange(1) }}> <div className="arrow-right" style={cursorStyle}></div></div> : ''}
+
             </div>
         );
     }

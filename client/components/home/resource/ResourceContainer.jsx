@@ -56,7 +56,7 @@ class ResourceContainer extends Component {
         let resources = unit ? unit.resources : [];
         const selectedRes = resources.filter(res => (res.type === category));
         return (
-            <div className="resource"  data-step="7" data-position="top" data-intro='選好單位分部後，裝備資源區即顯示該分部擁有的一切資源，選擇與點擊資源種類與數量並確定，擊可派出資源消滅災害'>
+            <div className="resource" data-step="7" data-position="top" data-intro='選好單位分部後，裝備資源區即顯示該分部擁有的一切資源，選擇與點擊資源種類與數量並確定，擊可派出資源消滅災害'>
                 <DepartContainer
                     depart={unit}
                     onDepartChange={this.onDepartChange}
@@ -67,14 +67,16 @@ class ResourceContainer extends Component {
                         onChange={this.onCategoryChange}
                     />
                     <RequireEQ />
-                    <EquipmentContainer
-                        equipments={selectedRes}
-                        onUnitAdj={this.onUnitAdj}
-                    />
-                    <div className="button_box ">
-                        <button className="btn btn_XL btn-black ">確定</button>
-                        <br />
-                        <button className="btn btn_XL btn-black">取消</button>
+                    <div className="resource_items">
+                        <EquipmentContainer
+                            equipments={selectedRes}
+                            onUnitAdj={this.onUnitAdj}
+                        />
+                        <div className="button_box">
+                            <button className="btn btn_XL btn-black ">確定</button>
+                            <br />
+                            <button className="btn btn_XL btn-black">取消</button>
+                        </div>
                     </div>
                 </div>
             </div>
