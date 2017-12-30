@@ -92,6 +92,7 @@ class ResourceContainer extends Component {
                 alert(err);
             }
         });
+        this.props.sendUnits(sendToSituation);
     }
 
     showConfim() {

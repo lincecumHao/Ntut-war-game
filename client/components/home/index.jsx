@@ -15,11 +15,14 @@ class Home extends Component {
         this.state = {
             systemDisplay: false,
             isIntroAsk: false,
-            playIntro: false
+            playIntro: false,
+            sendingIds: []
         }
         this.displaySystem = this.displaySystem.bind(this);
         this.goIntro = this.goIntro.bind(this);
         this.closeIntro = this.closeIntro.bind(this);
+        this.sendUnits = this.sendUnits.bind(this);
+        this.sended = this.sended.bind(this);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -47,6 +50,18 @@ class Home extends Component {
         });
     }
 
+    sendUnits(sendingIds) {
+        this.setState({
+            sendingIds
+        });
+    }
+
+    sended() {
+        this.setState({
+            sendingIds: []
+        });
+    }
+
     render() {
         const { isIntroAsk } = this.state;
         return (
@@ -69,9 +84,12 @@ class Home extends Component {
                         <EagleMap />
                         <Status />
                     </div>
-                    <MainMap />
+                    <MainMap
+                        sendingIds={this.state.sendingIds}
+                        sended={this.sended}
+                    />
                     <div className="footer">
-                        <ResourceContainer />
+                        <ResourceContainer sendUnits={this.sendUnits}/>
                     </div>
                 </div>
             </div>

@@ -52,7 +52,8 @@ class MainMap extends Component {
                     lng: marker.location[0],
                     icon: 'images/119_icon_50_44.png',
                     label: marker.name,
-                    className: 'badge Detachments_badge'
+                    className: 'badge Detachments_badge',
+                    unitId: marker._id
                 }));
             });
         }
@@ -65,7 +66,7 @@ class MainMap extends Component {
                 icon: 'images/earthquake_50_44.png'
             });
             this.calTime();
-        } else if(!this.dissasterLocation){
+        } else if (!this.dissasterLocation) {
             // Create dissaster location.
             this.dissasterLocation = this.createMarker({
                 lat: nextProps.happenLocation[1],
@@ -73,6 +74,33 @@ class MainMap extends Component {
                 icon: 'images/earthquake_50_44.png'
             });
             this.calTime();
+        }
+        if (nextProps.sendingIds.length > 0) {
+            nextProps.sendingIds.forEach(({ _id }) => {
+                const unit = this.props.units.filter(unit => (unit._id === _id))[0];
+                const d = new Date().getTime().toString();
+                this[_id + d] = {
+                    marker: this.createMarker({
+                        lat: unit.location[1],
+                        lng: unit.location[0]
+                    }),
+                    index: 1,
+                    interval: setInterval(() => {
+                        const movingObj = this[_id + d];
+                        const route = this.state[_id];
+                        let { marker, index } = movingObj;
+                        if (index >= route.length) {
+                            clearInterval(movingObj.interval);
+                            marker.setMap(null);
+                        } else {
+                            const location = route[index];
+                            marker.setPosition(location)
+                        }
+                        movingObj.index = movingObj.index + 1;
+                    }, 100)
+                }
+            });
+            this.props.sended();
         }
     }
 
@@ -90,9 +118,11 @@ class MainMap extends Component {
         this.markers.forEach(marker => {
             origins.push({
                 lat: marker.getPosition().lat(),
-                lng: marker.getPosition().lng()
+                lng: marker.getPosition().lng(),
+                unitId: marker.get('unitId')
             });
         });
+        const that = this;
         service.getDistanceMatrix(
             {
                 origins: origins,
@@ -103,6 +133,7 @@ class MainMap extends Component {
                     response.rows.forEach((row, index) => {
                         const duration = row.elements[0].duration.text;
                         const origin = origins[index];
+                        const unitId = origin.unitId;
                         this.timeMarker.push(this.createMarker({
                             lat: origin.lat,
                             lng: origin.lng,
@@ -113,7 +144,9 @@ class MainMap extends Component {
                             anchorX: (((duration.length - 1) * 16) / 2 + 12)
                         }));
 
-                        let directionsDisplay = new google.maps.DirectionsRenderer();
+                        let directionsDisplay = new google.maps.DirectionsRenderer({
+                            suppressMarkers: true
+                        });
                         directionsDisplay.setMap(this.mainMap);
                         var request = {
                             origin: origin,
@@ -124,37 +157,44 @@ class MainMap extends Component {
                         directionsService.route(request, function (result, status) {
                             if (status == google.maps.DirectionsStatus.OK) {
                                 directionsDisplay.setDirections(result);
+                                const obj = {};
+                                obj[unitId] = result.routes[0].overview_path;
+                                that.setState(obj);
                             }
                         });
                     });
                 } else {
                     throw new DOMException(status);
                 }
-            });
+            }
+        );
     }
 
-    createMarker({ lat, lng, icon, label, className, anchorX, anchorY }) {
-        let img = {
-            url: icon,
-            // This marker is 50 pixels wide by 44 pixels high.
-            size: new google.maps.Size(50, 44),
-            // The origin for this image is (0, 0).
-            origin: new google.maps.Point(0, 0)
-            // The anchor for this image is the base of the flagpole at (0, 32).
-            // anchor: new google.maps.Point(0, 32)
-        };
+    createMarker({ lat, lng, icon, label, className, anchorX, anchorY, unitId }) {
         let marker = new MarkerWithLabel({
             position: { lat, lng },
-            icon: img,
             draggable: false,
             map: this.mainMap
         });
+
+        if (icon !== undefined) {
+            let img = {
+                url: icon,
+                // This marker is 50 pixels wide by 44 pixels high.
+                size: new google.maps.Size(50, 44),
+                // The origin for this image is (0, 0).
+                origin: new google.maps.Point(0, 0)
+                // The anchor for this image is the base of the flagpole at (0, 32).
+                // anchor: new google.maps.Point(0, 32)
+            };
+            marker.setIcon(img);
+        }
         if (label) {
             marker.set('labelContent', label);
             marker.set('labelAnchor', new google.maps.Point((anchorX ? anchorX : (label.length * 16) / 2 + 12), (anchorY ? anchorY : 0)));
             marker.set('labelClass', className);
         }
-
+        marker.set('unitId', unitId);
         return marker;
     }
 
