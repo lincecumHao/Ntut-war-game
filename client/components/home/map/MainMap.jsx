@@ -15,11 +15,8 @@ class MainMap extends Component {
         this.timeMarker = [];
         this.dissasterLocation = null;
         this.directionsDisplays = [];
-        this.requireRes = {};
         this.createMarker = this.createMarker.bind(this);
         this.calTime = this.calTime.bind(this);
-        this.updDisasterLabel = this.updDisasterLabel.bind(this);
-        this.updSended = this.updSended.bind(this);
         this.generateProgressHtml = this.generateProgressHtml.bind(this);
         this.state = {
             send: {}
@@ -94,21 +91,13 @@ class MainMap extends Component {
                 labelAnchor: new google.maps.Point(40, 0)
             });
 
-            this.requireRes = {};
-            // Make required resources become global variable.
-            Object.keys(resources).forEach(key => {
-                this.requireRes[key] = {};
-                this.requireRes[key].need = resources[key];
-                this.requireRes[key].send = 0;
-            });
-
             // Calculate how long will it take to the dissaster location in every unit.
             this.calTime();
         }
 
         if (nextProps.sendingIds.length > 0) {
-            nextProps.sendingIds.forEach(({ _id, res }) => {
-
+            nextProps.sendingIds.forEach((sending) => {
+                const { _id, res } = sending;
                 const unit = this.props.units.filter(unit => (unit._id === _id))[0];
                 const d = new Date().getTime().toString();
                 this[_id + d] = {
@@ -126,8 +115,14 @@ class MainMap extends Component {
                         if (index >= route.length) {
 
                             clearInterval(movingObj.interval);
-                            this.updSended(res);
                             marker.setMap(null);
+                            const situationIndex = situation.index;
+                            const stageId = stage._id;
+                            Meteor.call('situation.addSendUnits', [sending], situationIndex, stageId, (err) => {
+                                if (err) {
+                                    alert(err);
+                                }
+                            });
                         } else {
                             const location = route[index];
                             marker.setPosition(location)
@@ -138,27 +133,10 @@ class MainMap extends Component {
             });
             this.props.sended();
         }
-    }
 
-    updSended(sendedRes) {
-        Object.keys(sendedRes).forEach(key => {
-            if (!this.requireRes[key]) return;
-            const { send } = this.requireRes[key];
-            this.requireRes[key].send = send + sendedRes[key];
-        });
-        this.updDisasterLabel();
-    }
-
-    updDisasterLabel() {
-        const resKeys = Object.keys(this.requireRes);
-        const eachTypeMax = Math.round(100 / resKeys.length);
-        let totalScoure = 0;
-        resKeys.forEach(key => {
-            const { need, send } = this.requireRes[key];
-            const score = Math.round((send * eachTypeMax) / need);
-            totalScoure += (score > eachTypeMax ? eachTypeMax : score);
-        });
-        this.dissasterLocation.set('labelContent', this.generateProgressHtml(totalScoure));
+        if(nextProps.progress !== this.props.progress){
+            this.dissasterLocation.set('labelContent', this.generateProgressHtml(nextProps.progress));
+        }
     }
 
     generateProgressHtml(currentProgress) {
@@ -293,6 +271,42 @@ const getAllParentUnit = function (parentName, parents) {
     return parents;
 };
 
+/**
+ * Calcuate how many required resource had been sended
+ */
+const calcuateProgress = function (resources, sended) {
+    // If any of resources or sended not assign, show zero.
+    if (!resources || !sended) return 0;
+
+    const requireRes = {};
+    // Make required resources become global variable.
+    Object.keys(resources).forEach(key => {
+        requireRes[key] = {};
+        requireRes[key].need = resources[key];
+        requireRes[key].send = 0;
+    });
+
+    // Render all sended resources, if any of them shows in required resource, sum.
+    sended.forEach(({ res }) => {
+        Object.keys(res).forEach(key => {
+            if (!requireRes[key]) return;
+            const { send } = requireRes[key];
+            requireRes[key].send = send + res[key];
+        });
+    })
+
+    const resKeys = Object.keys(requireRes);
+    const eachTypeMax = Math.round(100 / resKeys.length);
+    let totalScoure = 0;
+    resKeys.forEach(key => {
+        const { need, send } = requireRes[key];
+        const score = Math.round((send * eachTypeMax) / need);
+        totalScoure += (score > eachTypeMax ? eachTypeMax : score);
+    });
+
+    return totalScoure;
+}
+
 export default createContainer(() => {
     const units = Meteor.subscribe('units');
     const characters = Meteor.subscribe('characters');
@@ -321,20 +335,25 @@ export default createContainer(() => {
             // Get stage
             const unPassedStages = Stages.findOne({ 'situations.pass': false }, { sort: { index: 1, 'situations.index': 1 }, limit: 1 });
             let curSituation = {};
+            let progress = 0;
             if (unPassedStages) {
                 const { situations } = unPassedStages;
                 curSituation = situations.filter(obj => (obj.pass == false))[0];
+
+                progress = calcuateProgress(curSituation.resources, curSituation.sended);
             }
             return {
                 stage: unPassedStages,
                 situation: curSituation,
-                units: userActUnits
+                units: userActUnits,
+                progress
             }
         }
     }
     return {
         stage: {},
         situation: {},
-        units: []
+        units: [],
+        progress: 0
     }
 }, MainMap);

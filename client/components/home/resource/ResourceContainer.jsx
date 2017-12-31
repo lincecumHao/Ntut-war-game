@@ -87,11 +87,12 @@ class ResourceContainer extends Component {
                 sendToSituation.push(tmp);
             }
         });
-        Meteor.call('situation.addSendUnits', sendToSituation, situation, stage, (err) => {
-            if (err) {
-                alert(err);
-            }
-        });
+        console.log(sendToSituation, situation, stage);
+        // Meteor.call('situation.addSendUnits', sendToSituation, situation, stage, (err) => {
+        //     if (err) {
+        //         alert(err);
+        //     }
+        // });
         this.props.sendUnits(sendToSituation);
     }
 
