@@ -232,8 +232,8 @@ export default createContainer(() => {
 
         return {
             units: userActUnits,
-            stage: unPassedStages._id,
-            situation: curSituation.index
+            stage: unPassedStages ? unPassedStages._id : undefined,
+            situation: curSituation ? curSituation.index : undefined
         }
     }
     return {

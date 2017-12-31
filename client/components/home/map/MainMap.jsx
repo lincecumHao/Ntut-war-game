@@ -10,12 +10,20 @@ class MainMap extends Component {
         super(props);
         this.mainMap = null;
         this.eagleMap = null;
-        this.createMarker = this.createMarker.bind(this);
         this.MarkerWithLabel;
         this.markers = [];
         this.timeMarker = [];
         this.dissasterLocation = null;
+        this.directionsDisplays = [];
+        this.requireRes = {};
+        this.createMarker = this.createMarker.bind(this);
         this.calTime = this.calTime.bind(this);
+        this.updDisasterLabel = this.updDisasterLabel.bind(this);
+        this.updSended = this.updSended.bind(this);
+        this.generateProgressHtml = this.generateProgressHtml.bind(this);
+        this.state = {
+            send: {}
+        }
     }
 
     componentDidMount() {
@@ -36,6 +44,8 @@ class MainMap extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+
+        // show unit on map.
         if (this.props.units.length !== nextProps.units.length) {
             // Remove all marker
             this.markers.forEach(marker => {
@@ -57,32 +67,56 @@ class MainMap extends Component {
                 }));
             });
         }
-        if (this.props.happenLocation && nextProps.happenLocation[1] !== this.props.happenLocation[1] && nextProps.happenLocation[0] !== this.props.happenLocation[0]) {
-            this.dissasterLocation.setMap(null);
-            // Create dissaster location.
+
+        // Show disaster on map.
+        const { stage, situation } = nextProps;
+        if (this.props.stage.index !== stage.index || this.props.situation.index !== situation.index) {
+            // Different stage or different situation.
+
+            // Clean current dissaster location if any.
+            if (this.dissasterLocation) {
+                this.dissasterLocation.setMap(null);
+
+                // If dissaster location exist, should have direction also, clear too.
+                this.directionsDisplays.forEach(display => {
+                    display.setMap(null);
+                })
+            }
+
+            // Create dissaster marker.
+            const { placemark: { geometry: { location } }, resources } = situation;
             this.dissasterLocation = this.createMarker({
-                lat: nextProps.happenLocation[1],
-                lng: nextProps.happenLocation[0],
-                icon: 'images/earthquake_50_44.png'
+                lat: location.lat,
+                lng: location.lng,
+                icon: 'images/earthquake_50_44.png',
+                className: '',
+                label: this.generateProgressHtml(0),
+                labelAnchor: new google.maps.Point(40, 0)
             });
-            this.calTime();
-        } else if (!this.dissasterLocation) {
-            // Create dissaster location.
-            this.dissasterLocation = this.createMarker({
-                lat: nextProps.happenLocation[1],
-                lng: nextProps.happenLocation[0],
-                icon: 'images/earthquake_50_44.png'
+
+            this.requireRes = {};
+            // Make required resources become global variable.
+            Object.keys(resources).forEach(key => {
+                this.requireRes[key] = {};
+                this.requireRes[key].need = resources[key];
+                this.requireRes[key].send = 0;
             });
+
+            // Calculate how long will it take to the dissaster location in every unit.
             this.calTime();
         }
+
         if (nextProps.sendingIds.length > 0) {
-            nextProps.sendingIds.forEach(({ _id }) => {
+            nextProps.sendingIds.forEach(({ _id, res }) => {
+
                 const unit = this.props.units.filter(unit => (unit._id === _id))[0];
                 const d = new Date().getTime().toString();
                 this[_id + d] = {
                     marker: this.createMarker({
                         lat: unit.location[1],
-                        lng: unit.location[0]
+                        lng: unit.location[0],
+                        icon: 'images/car_small_nobg.png',
+                        size: new google.maps.Size(73, 47)
                     }),
                     index: 1,
                     interval: setInterval(() => {
@@ -90,7 +124,9 @@ class MainMap extends Component {
                         const route = this.state[_id];
                         let { marker, index } = movingObj;
                         if (index >= route.length) {
+
                             clearInterval(movingObj.interval);
+                            this.updSended(res);
                             marker.setMap(null);
                         } else {
                             const location = route[index];
@@ -102,6 +138,35 @@ class MainMap extends Component {
             });
             this.props.sended();
         }
+    }
+
+    updSended(sendedRes) {
+        Object.keys(sendedRes).forEach(key => {
+            if (!this.requireRes[key]) return;
+            const { send } = this.requireRes[key];
+            this.requireRes[key].send = send + sendedRes[key];
+        });
+        this.updDisasterLabel();
+    }
+
+    updDisasterLabel() {
+        const resKeys = Object.keys(this.requireRes);
+        const eachTypeMax = Math.round(100 / resKeys.length);
+        let totalScoure = 0;
+        resKeys.forEach(key => {
+            const { need, send } = this.requireRes[key];
+            const score = Math.round((send * eachTypeMax) / need);
+            totalScoure += (score > eachTypeMax ? eachTypeMax : score);
+        });
+        this.dissasterLocation.set('labelContent', this.generateProgressHtml(totalScoure));
+    }
+
+    generateProgressHtml(currentProgress) {
+        return `<div class="progress">
+                    <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: ${100 - currentProgress}%;">
+                        <span style="visibility: hidden;">60% Complete</span>
+                    </div>
+                </div>`;
     }
 
     calTime() {
@@ -157,6 +222,7 @@ class MainMap extends Component {
                         directionsService.route(request, function (result, status) {
                             if (status == google.maps.DirectionsStatus.OK) {
                                 directionsDisplay.setDirections(result);
+                                that.directionsDisplays.push(directionsDisplay);
                                 const obj = {};
                                 obj[unitId] = result.routes[0].overview_path;
                                 that.setState(obj);
@@ -170,7 +236,7 @@ class MainMap extends Component {
         );
     }
 
-    createMarker({ lat, lng, icon, label, className, anchorX, anchorY, unitId }) {
+    createMarker({ lat, lng, icon, label, className, anchorX, anchorY, unitId, size, labelAnchor }) {
         let marker = new MarkerWithLabel({
             position: { lat, lng },
             draggable: false,
@@ -181,7 +247,7 @@ class MainMap extends Component {
             let img = {
                 url: icon,
                 // This marker is 50 pixels wide by 44 pixels high.
-                size: new google.maps.Size(50, 44),
+                size: size ? size : new google.maps.Size(50, 44),
                 // The origin for this image is (0, 0).
                 origin: new google.maps.Point(0, 0)
                 // The anchor for this image is the base of the flagpole at (0, 32).
@@ -191,7 +257,7 @@ class MainMap extends Component {
         }
         if (label) {
             marker.set('labelContent', label);
-            marker.set('labelAnchor', new google.maps.Point((anchorX ? anchorX : (label.length * 16) / 2 + 12), (anchorY ? anchorY : 0)));
+            marker.set('labelAnchor', labelAnchor ? labelAnchor : new google.maps.Point((anchorX ? anchorX : (label.length * 16) / 2 + 12), (anchorY ? anchorY : 0)));
             marker.set('labelClass', className);
         }
         marker.set('unitId', unitId);
@@ -233,39 +299,42 @@ export default createContainer(() => {
     const stages = Meteor.subscribe('stages');
     if (units.ready() && characters.ready() && stages.ready()) {
         let character = Characters.findOne({ userId: Meteor.userId() });
-        if (!character || character.act.length === 0) return { units: [] };
-        const actIds = character.act;
-        let userActUnits = Units.find({ _id: { $in: actIds } }).fetch();
-        const userUnit = Units.findOne({ _id: Meteor.user().profile.position });
-        userActUnits.forEach(unit => {
-            unit.depart = userUnit.name;
-            unit.crew = unit.name;
-            if (unit.parent) {
-                let parent = getAllParentUnit(unit.parent, []);
-                parent.pop();
-                if (parent.length === 2) {
-                    unit.brigade = parent[1];
-                    unit.group = parent[0];
-                } else if (parent.length === 1) {
-                    unit.brigade = parent[0];
+        if (character && character.act.length !== 0) {
+            const actIds = character.act;
+            let userActUnits = Units.find({ _id: { $in: actIds } }).fetch();
+            const userUnit = Units.findOne({ _id: Meteor.user().profile.position });
+            userActUnits.forEach(unit => {
+                unit.depart = userUnit.name;
+                unit.crew = unit.name;
+                if (unit.parent) {
+                    let parent = getAllParentUnit(unit.parent, []);
+                    parent.pop();
+                    if (parent.length === 2) {
+                        unit.brigade = parent[1];
+                        unit.group = parent[0];
+                    } else if (parent.length === 1) {
+                        unit.brigade = parent[0];
+                    }
                 }
-            }
-        });
+            });
 
-        // Get stage
-        const unPassedStages = Stages.findOne({ 'situations.pass': false }, { sort: { index: 1, 'situations.index': 1 }, limit: 1 });
-        var location = [];
-        if (unPassedStages) {
-            const { situations } = unPassedStages;
-            const curSituation = situations.filter(obj => (obj.pass == false))[0];
-            location = [curSituation.placemark.geometry.location.lng, curSituation.placemark.geometry.location.lat];
-        }
-        return {
-            units: userActUnits,
-            happenLocation: location
+            // Get stage
+            const unPassedStages = Stages.findOne({ 'situations.pass': false }, { sort: { index: 1, 'situations.index': 1 }, limit: 1 });
+            let curSituation = {};
+            if (unPassedStages) {
+                const { situations } = unPassedStages;
+                curSituation = situations.filter(obj => (obj.pass == false))[0];
+            }
+            return {
+                stage: unPassedStages,
+                situation: curSituation,
+                units: userActUnits
+            }
         }
     }
     return {
+        stage: {},
+        situation: {},
         units: []
     }
 }, MainMap);
