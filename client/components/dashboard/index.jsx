@@ -1,12 +1,23 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { createContainer } from 'meteor/react-meteor-data';
+import Pie from './Pie';
+import ReactDOM from 'react-dom';
 import { Stages } from '../../../imports/collections/stages.js';
+import { Units } from '../../../imports/collections/units.js';
 import MessageContainer from '../home/chatroom/MessageContainer';
 
 class Dashboard extends Component {
     constructor(props) {
         super(props);
+        this.dbMap = null;
+        this.dissasterMarker = null;
+        this.createMarker = this.createMarker.bind(this);
+        this.getPieChartWidth = this.getPieChartWidth.bind(this);
+        this.timer = null;
+        this.state = {
+            page: 1
+        };
     }
 
     componentDidMount() {
@@ -24,8 +35,14 @@ class Dashboard extends Component {
             clickToGo: false
         });
         window.dbMap = this.dbMap;
-        this.dissasterMarker = null;
-        this.createMarker = this.createMarker.bind(this);
+
+        // Update pieChart every 3 second.
+        this.timer = setInterval(() => {
+            const maxPage = Math.ceil(Object.keys(this.props.allResourceUseage).length / 8);
+            this.setState({
+                page: this.state.page + 1 > maxPage ? 1 : this.state.page + 1
+            });
+        }, 5000)
     }
 
     componentWillReceiveProps(nextProps) {
@@ -45,6 +62,10 @@ class Dashboard extends Component {
                 });
             }
         }
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timer);
     }
 
     createMarker({ lat, lng, icon, label, className, anchorX, anchorY, unitId, size, labelAnchor }) {
@@ -75,8 +96,47 @@ class Dashboard extends Component {
         return marker;
     }
 
+    getPieChartWidth() {
+        const div = ReactDOM.findDOMNode(this.piechartContainer);
+        return div ? div.offsetWidth / 4 - 30 : 100;
+    }
+
+    generatePieArray() {
+        const retAry = {
+            upper: [],
+            lower: []
+        };
+        const { allResourceUseage } = this.props;
+        const { page } = this.state;
+        const width = this.getPieChartWidth();
+        Object.keys(allResourceUseage).forEach((key, index) => {
+            const useage = allResourceUseage[key];
+            if (index >= 8 * page - 8 && index < 8 * page) {
+                const pie = (
+                    <Col key={key} lg={3} md={3} xs={3} style={{ textAlign: 'center', height: '80%' }}>
+                        <Pie
+                            width={width}
+                            avaliable={useage.avaliable}
+                            used={useage.used}
+                        />
+                        {useage.name}
+                    </Col>
+                );
+                if (index >= (8 * page - 8) && index < 8 * page - 4) {
+                    retAry.upper.push(pie);
+                } else if (index >= (8 * page - 4) && index < 8 * page) {
+                    retAry.lower.push(pie);
+                }
+            }
+        });
+        return retAry;
+    }
+
     render() {
-        const { time } = this.props;
+        const { time, allResourceUseage } = this.props;
+        const pieAry = this.generatePieArray();
+        const { page } = this.state;
+        const width = 100;
         let dateStr = '';
         if (time) {
             dateStr = `民國${time.getFullYear() - 1911}年${time.getMonth() + 1}月${time.getDate()}日 ${time.getHours()}時${time.getMinutes()}分`
@@ -140,8 +200,14 @@ class Dashboard extends Component {
                     </Col>
                     <Col lg={8} md={8} xs={8} className="infobox chartable">
                         <Row className="title">單位資源裝備 消耗數量 / 剩餘數量</Row>
-
-                        <Row className="height-100p">TEST</Row>
+                        <Row className="height-100p" ref={input => { this.piechartContainer = input }}>
+                            <Row style={{ height: '50%', margin: '0' }}>
+                                {pieAry.upper}
+                            </Row>
+                            <Row style={{ height: '50%', margin: '0' }}>
+                                {pieAry.lower}
+                            </Row>
+                        </Row>
                     </Col>
                 </Row>
             </Grid>
@@ -151,12 +217,53 @@ class Dashboard extends Component {
 
 export default createContainer(() => {
     let stages = Meteor.subscribe('stages');
-    if (stages.ready()) {
+    let units = Meteor.subscribe('units');
+    if (stages.ready() && units.ready()) {
+        // Get all unit resources count.
+        const allResourceUseage = {};
+        const allUnits = Units.find({}).fetch();
+        allUnits.forEach(unit => {
+            if (unit.resources) {
+                unit.resources.forEach(res => {
+                    if (allResourceUseage[res.id]) {
+                        allResourceUseage[res.id].avaliable = res.avaliable + allResourceUseage[res.id].avaliable;
+                    } else {
+                        allResourceUseage[res.id] = {};
+                        allResourceUseage[res.id].name = res.name;
+                        allResourceUseage[res.id].avaliable = res.avaliable;
+                        allResourceUseage[res.id].used = 0;
+                    }
+                });
+            }
+        });
+
+        const allStages = Stages.find({}).fetch();
+        allStages.forEach(stage => {
+            if (stage.situations) {
+                stage.situations.forEach(situation => {
+                    if (situation.sended) {
+                        situation.sended.forEach(({ res }) => {
+                            Object.keys(res).forEach(resId => {
+                                if (allResourceUseage[resId]) {
+                                    if (allResourceUseage[resId].used) {
+                                        allResourceUseage[resId].used += res[resId];
+                                    } else {
+                                        allResourceUseage[resId].used = res[resId];
+                                    }
+                                }
+                            })
+                        })
+                    }
+                });
+            }
+        });
+
         const unPassedStages = Stages.findOne({ 'situations.pass': false }, { sort: { index: 1, 'situations.index': 1 }, limit: 1 });
         if (unPassedStages) {
             const { index, situations } = unPassedStages;
             const curSituation = situations.filter(obj => (obj.pass == false))[0];
             return {
+                allResourceUseage,
                 stage: index,
                 situationIndex: curSituation.index,
                 situation: curSituation.common,
@@ -165,7 +272,8 @@ export default createContainer(() => {
                 time: curSituation.time
             }
         }
-        return {};
+
+        return { allResourceUseage };
     }
-    return {};
+    return { allResourceUseage: {} };
 }, Dashboard);
