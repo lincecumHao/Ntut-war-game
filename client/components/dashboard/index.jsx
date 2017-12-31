@@ -10,6 +10,7 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
+        MarkerWithLabel = require('markerwithlabel')(google.maps);
         this.dbMap = new google.maps.Map(document.getElementById('dashboard-map'), {
             center: { lat: 25.045552, lng: 121.531083 },
             zoom: 13,
@@ -23,13 +24,61 @@ class Dashboard extends Component {
             clickToGo: false
         });
         window.dbMap = this.dbMap;
+        this.dissasterMarker = null;
+        this.createMarker = this.createMarker.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { stage, situationIndex, geometry } = nextProps;
+        if (stage !== this.props.stage && situationIndex !== this.props.situationIndex) {
+            if (this.dissasterMarker) {
+                this.dissasterMarker.setMap(null);
+                this.dissasterMarker = null;
+            }
+            if (geometry) {
+                const { geometry: { location } } = geometry;
+                this.dissasterMarker = this.createMarker({
+                    lat: location.lat,
+                    lng: location.lng,
+                    icon: 'images/earthquake_50_44.png',
+                    labelAnchor: new google.maps.Point(40, 0)
+                });
+            }
+        }
+    }
+
+    createMarker({ lat, lng, icon, label, className, anchorX, anchorY, unitId, size, labelAnchor }) {
+        let marker = new MarkerWithLabel({
+            position: { lat, lng },
+            draggable: false,
+            map: this.dbMap
+        });
+
+        if (icon !== undefined) {
+            let img = {
+                url: icon,
+                // This marker is 50 pixels wide by 44 pixels high.
+                size: size ? size : new google.maps.Size(50, 44),
+                // The origin for this image is (0, 0).
+                origin: new google.maps.Point(0, 0)
+                // The anchor for this image is the base of the flagpole at (0, 32).
+                // anchor: new google.maps.Point(0, 32)
+            };
+            marker.setIcon(img);
+        }
+        if (label) {
+            marker.set('labelContent', label);
+            marker.set('labelAnchor', labelAnchor ? labelAnchor : new google.maps.Point((anchorX ? anchorX : (label.length * 16) / 2 + 12), (anchorY ? anchorY : 0)));
+            marker.set('labelClass', className);
+        }
+        marker.set('unitId', unitId);
+        return marker;
     }
 
     render() {
-        const {time} = this.props;
+        const { time } = this.props;
         let dateStr = '';
-        console.log(time);
-        if(time){
+        if (time) {
             dateStr = `民國${time.getFullYear() - 1911}年${time.getMonth() + 1}月${time.getDate()}日 ${time.getHours()}時${time.getMinutes()}分`
         }
         return (
@@ -62,7 +111,7 @@ class Dashboard extends Component {
                                     災害時間
                                 </Col>
                                 <Col lg={10} md={10} xs={10} className="text-center">
-                                   {dateStr}
+                                    {dateStr}
                                 </Col>
                             </Row>
                         </Row>
@@ -109,8 +158,10 @@ export default createContainer(() => {
             const curSituation = situations.filter(obj => (obj.pass == false))[0];
             return {
                 stage: index,
+                situationIndex: curSituation.index,
                 situation: curSituation.common,
                 placemark: curSituation.placemark ? curSituation.placemark.name : '',
+                geometry: curSituation.placemark,
                 time: curSituation.time
             }
         }
