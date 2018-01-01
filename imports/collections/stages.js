@@ -132,8 +132,49 @@ Meteor.methods({
                     { multi: true }
                 );
             })
-
         });
+
+        // Check if all required resources are arrival.
+        const stage = Stages.findOne({ _id: stageId });
+        const curSituation = stage.situations.filter(situation => (situation.index === situationIndex))[0];
+        const { resources, sended } = curSituation;
+        const requireRes = {};
+        // Make required resources become global variable.
+        Object.keys(resources).forEach(key => {
+            requireRes[key] = {};
+            requireRes[key].need = resources[key];
+        });
+
+        // Render all sended resources, if any of them shows in required resource, sum.
+        sended.forEach(({ res }) => {
+            Object.keys(res).forEach(key => {
+                if (!requireRes[key]) return;
+                const { need } = requireRes[key];
+                requireRes[key].need = need - res[key];
+            });
+        });
+
+        let passed = true;
+        Object.keys(requireRes).some(key => {
+            if(requireRes[key].need > 0){
+                passed = false;
+                return;
+            }
+        });
+        
+        if(passed) {
+            let pssedObj = {};
+            pssedObj['situations.$.pass'] = passed;
+            Stages.update({
+                _id: stageId,
+                'situations.index': parseInt(situationIndex)
+            }, {
+                    $set: pssedObj
+                },
+                false,
+                true
+            );
+        }
     }
 });
 

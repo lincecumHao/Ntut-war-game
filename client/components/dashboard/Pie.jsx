@@ -1,21 +1,7 @@
 import React from 'react';
-import { PieChart } from 'react-easy-chart';
 import { VictoryPie } from 'victory';
 
-// const Pie = ({ width, avaliable, used }) => {
-//     return (
-//         <PieChart
-//             labels
-//             size={width}
-//             data={[
-//                 { key: avaliable - used, value: avaliable - used, color: 'white' },
-//                 { key: used, value: used, color: 'red' }
-//             ]}
-//         />
-//     );
-// };
-
-const Pie = ({ width, avaliable, used }) => {
+const Pie = ({ avaliable, used }) => {
     return (
         <VictoryPie
             animate={{

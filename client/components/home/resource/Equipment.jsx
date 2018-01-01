@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const Equipment = ({ id, img, used, avaliable, leftRes, onUnitAdj, name }) => (
     <div className="resource_item">
-        <img src={img + '.png'} width="90px" height="70px" alt={name} />
+        <img title={name} src={`images/icon/${id} ${name}.jpg`} alt={name} />
         <p>x {used}</p>
         <div>
             <button disabled={(leftRes == avaliable)} onClick={() => { onUnitAdj(id, (used - 1 < 0 ? 0 : used - 1)) }}><span className="glyphicon glyphicon-chevron-left"></span></button>

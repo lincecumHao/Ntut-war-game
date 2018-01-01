@@ -60,6 +60,7 @@ class Dashboard extends Component {
                     icon: 'images/earthquake_50_44.png',
                     labelAnchor: new google.maps.Point(40, 0)
                 });
+                this.dbMap.panTo(location);
             }
         }
     }
@@ -133,10 +134,8 @@ class Dashboard extends Component {
     }
 
     render() {
-        const { time, allResourceUseage } = this.props;
+        const { time } = this.props;
         const pieAry = this.generatePieArray();
-        const { page } = this.state;
-        const width = 100;
         let dateStr = '';
         if (time) {
             dateStr = `民國${time.getFullYear() - 1911}年${time.getMonth() + 1}月${time.getDate()}日 ${time.getHours()}時${time.getMinutes()}分`
